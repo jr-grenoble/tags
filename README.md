@@ -1,25 +1,38 @@
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
-[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blueviolet.svg)](https://github.com/google/gts)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![repository: github](https://img.shields.io/badge/repo-tags-black.svg)](https://github.com/jr-grenoble/tags)
+[![builder: Gulp](https://img.shields.io/badge/builder-gulp-ff2000.svg)](https://gulpjs.com)
+[![code style: prettier](https://img.shields.io/badge/format-prettier-ffff00.svg)](https://github.com/prettier/prettier)
+[![code style: Google](https://img.shields.io/badge/code_style-google-60ff40.svg)](https://github.com/google/gts)
+[![language: TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-0080ff.svg)](http://www.typescriptlang.org/)
+[![documentation: typedoc](https://img.shields.io/badge/doc_gen-typedoc-8000ff.svg)](https://typedoc.org)
+[![spelling: cspell](https://img.shields.io/badge/spelling-cspell-40ff50.svg)](https://github.com/streetsidesoftware/vscode-spell-checker/)
 
 Note: this file is hardlinked into the root project directory.
 
-# Properties
+# Tags
 
-**Properties** is a [Google Apps Script Add-on](https://developers.google.com/workspace/add-ons/how-tos/building-gsuite-addons) that allows users to view and edit file properties.
+**Tags** is a self contained [Typescript](https://www.typescriptlang.org/) library that provides chainable, parametrizable tags for [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) as well as other text processing utilities.
 
-File properties fall in two categories:
-
-1. Drive properties associated with the [Advanced Drive Service](https://developers.google.com/apps-script/advanced/drive#adding_custom_properties); such properties can be accessed outside of Apps Script, but there are [hard limits](https://developers.google.com/drive/api/v2/reference/properties) on such properties, in particular, the combined key and value string length must be kept under 124 bytes and there can't be more than 100 such properties per file.
-2. Script properties accessible only via the Google Apps Script [Properties Service](https://developers.google.com/apps-script/reference/properties), i.e. restricted to Google editors (document). Such properties are not shared between scipts, meaning that you cannot use them to communicate across add-ons and applications. Refer to the [script properties guide](https://developers.google.com/apps-script/guides/properties) for a better understanding of these properties.
-
-This application allows for viewing and editing both types of properties. However, the usefulness of modifying script properties is limited, as no other application can use these properties. On the other hand, the add-on can be used as a [library](https://developers.google.com/apps-script/guides/libraries), so that other add-ons can allow users to view and edit script properties.
+This is an opinionated library. It provides reasonable options only.
 
 # Usage
 
+The _Tags_ library consists of a single typescript module conforming to modern module conventions. You can use the library via `import` statements such as:
+
+```typescript
+import * as tags from "./libs/tags"; // tags are usable via their names qualified with "tags"
+console.log(tags.json`array ${[1, 2, 3]}`);
+
+import type { printable } from "./libs/tags"; // imported types leave no trace in the executable code
+import { json as log } from "./libs/tags"; // rename imported tag
+console.log(
+  log`object ${{ a: 1, b: 2, c: { c1: 3.1, c2: 3.2 } } as printable}`
+);
+```
+
 # Project structure
 
-The project uses [clasp](https://github.com/google/clasp) and of course git. The repository is [jr-grenoble/clasp](https://github.com/jr-grenoble/clasp). Access from my Mac requires a personal access token.
+The project uses git. The repository is [jr-grenoble/clasp](https://github.com/jr-grenoble/tags). Access from my Mac requires a personal access token. The project structure is pretty standard.
 
     .
     ├── assets                  # Static images, data…
@@ -31,4 +44,35 @@ The project uses [clasp](https://github.com/google/clasp) and of course git. The
     ├── LICENSE.md              # License & copyright
     └── README.md               # Hard link to docs
 
-The project uses [typedoc](https://typedoc.org/) for documentation.
+The project uses [typedoc](https://typedoc.org/) for documentation and [gulp](https://gulpjs.com/) for automation.
+
+# Naming conventions
+
+## Pseudo dashes
+
+This library uses pseudo-dashes to separate words in identifiers. Because the dash is not allowed in typescript identifiers, we use the half width Hangul letter eu `ｰ`, unicode `\uffda` instead of a real dash. For instance `chainableｰtag` is a valid identifier. The spell checker is thus configured to ignore corresponding patterns `/(\w+ｰ)+\w+/gim`.
+
+## Types
+
+As types and interfaces have their own scopes, we often use variables named after their type. We will thus not hesitate to write:
+
+```typescript
+const number: number = 3;
+```
+
+This forces the coder to pay attention.
+
+We **do not** capitalize types nor class names, there's no point doing so.
+
+## Arrays and collections are plural, functions are verbs
+
+To help spot arrays and collections, we give them plural identifiers, e.g.
+
+```typescript
+const numberingｰoptions = {
+  startｰat: 1,
+  padｰleft: 0,
+};
+
+const textｰlines = input.split("\n");
+```
