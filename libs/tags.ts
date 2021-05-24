@@ -6,23 +6,26 @@
  * @copyright (c) Jean-René Bouvier, from 2021 on.
  *
  * @license
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *  This program is distributed in the hope that it will be useful,
- *  but **without any warranty**; without even the implied warranty of
- *  merchantability or fitness for a particular purpose.  See the
- *  GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but **without any warranty**; without even the implied warranty of
+ * merchantability or fitness for a particular purpose.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
+ *
+ * The author hereby grants Facts Haven SAS and its affiliates the right to use and perform any derivative works.
  *
  * Tags
  * ====
- * The author hereby grants Facts Haven SAS and its affiliates the right to use and perform any derivative works
  *
  * @overview
+ *
  * This library module provides chainable tag functions (or simply _tags_)to modify template literals, along with a few utility functions.
  *
  * - Refer to [MDN template literals]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals} for explanations
@@ -78,12 +81,13 @@
  * The `templateｰstrings` type is basically an array of readonly strings augmented with a raw property that stores
  * the same string literals unprocessed for escape sequence.
  */
-export interface templateｰstrings extends ReadonlyArray<string> {
-  raw: readonly string[]; // actually this is already in the TemplateStringsArray, we put it here for documentation
-} // alias for template string arrays
+export type templateｰstrings = TemplateStringsArray;
+// export interface templateｰstrings extends ReadonlyArray < string > {
+//   raw: readonly string[]; // actually this is already in the TemplateStringsArray, we put it here for documentation
+// } // alias for template string arrays
 
 /**
- * Tag functions must be passed printable expressions for substitution parameters
+ * Tag functions must be passed printable expressions for substitution
  */
 export interface printable {
   toString(): string;
@@ -128,8 +132,44 @@ export interface tagｰfunction {
    * @see [MDN template literals]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals}
    * for more information
    */
-  (strings: templateｰstrings, ...values: printable[]): string;
+  (strings: templateｰstrings, ...values: printable[]): any;
 }
+
+export interface callableｰtagｰfunction extends tagｰfunction {
+  (stringｰliteralｰorｰexpression: string): any;
+}
+
+const makeｰraw = (
+  strings: ReadonlyArray<string>,
+  rawｰstrings: { raw: readonly string[] }
+): templateｰstrings =>
+  <ReadonlyArray<string> & { raw: readonly string[] }>(
+    Object.assign(strings, rawｰstrings)
+  );
+
+export const makeｰcallable = (tag: tagｰfunction): callableｰtagｰfunction => {
+  // Record the name of the callable tag, refusing nullish names
+  const tagｰname = tag.name || "anoymousｰtag";
+  // The return function has 3 overload signatures:
+  function callable(strings: templateｰstrings, ...values: printable[]): any;
+  function callable(stringｰliteral: string): any;
+  // Here is the overloaded function implementation
+  function callable(
+    stringｰorｰstrings: string | templateｰstrings,
+    ...values: printable[]
+  ): any {
+    if (typeof stringｰorｰstrings !== "string") {
+      return tag(stringｰorｰstrings as templateｰstrings, ...values);
+    }
+    return tag(
+      makeｰraw([stringｰorｰstrings], {
+        raw: [stringｰorｰstrings],
+      })
+    );
+  }
+  rename(callable, tagｰname);
+  return callable;
+};
 
 /**
  * @example
