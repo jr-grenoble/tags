@@ -25,7 +25,7 @@ When creating a [`numberingｰcounter`](../classes/numbering_counter.md), we pas
 
 • `Optional` **numberingｰscheme**: ``"alpha"`` \| ``"Alpha"`` \| ``"roman"`` \| ``"Roman"`` \| ``"digit"`` \| ``"Digit"``
 
-Defined in: [Dev/projects/tags/libs/tags.ts:249](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L249)
+Defined in: [Dev/projects/tags/libs/tags.ts:249](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L249)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 try
 
-Defined in: [Dev/projects/tags/libs/tags.ts:240](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L240)
+Defined in: [Dev/projects/tags/libs/tags.ts:240](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L240)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • `Optional` **padｰwidth**: *number*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:246](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L246)
+Defined in: [Dev/projects/tags/libs/tags.ts:246](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L246)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • `Optional` **padｰwith**: *string* \| *number*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:247](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L247)
+Defined in: [Dev/projects/tags/libs/tags.ts:247](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L247)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 • `Optional` **padｰzeroｰwith**: *string* \| *number*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:248](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L248)
+Defined in: [Dev/projects/tags/libs/tags.ts:248](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L248)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 2
 
-Defined in: [Dev/projects/tags/libs/tags.ts:242](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L242)
+Defined in: [Dev/projects/tags/libs/tags.ts:242](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L242)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 • `Optional` **prefixｰzero**: *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:244](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L244)
+Defined in: [Dev/projects/tags/libs/tags.ts:244](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L244)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 • `Optional` **signｰall**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:250](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L250)
+Defined in: [Dev/projects/tags/libs/tags.ts:250](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L250)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 • `Optional` **suffix**: *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:243](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L243)
+Defined in: [Dev/projects/tags/libs/tags.ts:243](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L243)
 
 ___
 
@@ -101,4 +101,4 @@ ___
 
 • `Optional` **suffixｰzero**: *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:245](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L245)
+Defined in: [Dev/projects/tags/libs/tags.ts:245](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L245)

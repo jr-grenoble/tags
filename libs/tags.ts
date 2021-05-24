@@ -1,7 +1,7 @@
 /**
  * @module Tags - a collection of chainable tags for template string literals
  *
- * @author [Jean-René Bouvier](24454054+jr-grenoble@users.noreply.github.com)
+ * @author [Jean-René Bouvier](mailto:24454054+jr-grenoble@users.noreply.github.com)
  *
  * @copyright (c) Jean-René Bouvier, from 2021 on.
  *

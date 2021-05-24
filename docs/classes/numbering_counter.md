@@ -36,7 +36,7 @@
 
 **Returns:** [*numberingｰcounter*](numbering_counter.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:950](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L950)
+Defined in: [Dev/projects/tags/libs/tags.ts:950](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L950)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:950](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:950](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L950)
+Defined in: [Dev/projects/tags/libs/tags.ts:950](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L950)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:949](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L949)
+Defined in: [Dev/projects/tags/libs/tags.ts:949](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L949)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • `Private` `Readonly` **stringｰpadding**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:948](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L948)
+Defined in: [Dev/projects/tags/libs/tags.ts:948](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L948)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **value**: *number*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:947](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L947)
+Defined in: [Dev/projects/tags/libs/tags.ts:947](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L947)
 
 ## Accessors
 
@@ -102,7 +102,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:947](https://github.com/jr-grenoble/
 
 **Returns:** *this*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1009](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L1009)
+Defined in: [Dev/projects/tags/libs/tags.ts:1009](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1009)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1016](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L1016)
+Defined in: [Dev/projects/tags/libs/tags.ts:1016](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1016)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1013](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L1013)
+Defined in: [Dev/projects/tags/libs/tags.ts:1013](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1013)
 
 ___
 
@@ -132,4 +132,4 @@ ___
 
 **Returns:** *this*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1005](https://github.com/jr-grenoble/tags/blob/1c97e94/libs/tags.ts#L1005)
+Defined in: [Dev/projects/tags/libs/tags.ts:1005](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1005)
