@@ -1,0 +1,33 @@
+{
+  "name": "tags",
+  "version": "1.0.0",
+  "description": "self contained template literal tags library",
+  "main": "dist/demo.js",
+  "module": "dist/libs/tags.js",
+  "directories": {
+    "dist": "dist",
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jr-grenoble/tags"
+  },
+  "keywords": [
+    "typescript",
+    "template literal",
+    "tag"
+  ],
+  "author": "Jean-René Bouvier",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/jr-grenoble/tags/issues"
+  },
+  "homepage": "https://github.com/jr-grenoble/tags#readme",
+  "dependencies": {
+    "esm": "^3.2.25"
+  }
+}

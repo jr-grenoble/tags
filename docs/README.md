@@ -1,3 +1,5 @@
+Tags / [Exports](modules.md)
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![repository: github](https://img.shields.io/badge/repo-tags-black.svg)](https://github.com/jr-grenoble/tags)
 [![builder: Gulp](https://img.shields.io/badge/builder-gulp-ff2000.svg)](https://gulpjs.com)
