@@ -126,7 +126,7 @@ The library exports types
 | `digit` | (`n`: *number*) => *string* |
 | `roman` | (`n`: *number*, `s?`: *string*) => *string* |
 
-Defined in: [Dev/projects/tags/libs/tags.ts:918](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L918)
+Defined in: [Dev/projects/tags/libs/tags.ts:919](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L919)
 
 ## Functions
 
@@ -143,7 +143,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:918](https://github.com/jr-grenoble/
 
 **Returns:** (`n`: *number*, `s?`: *string*) => *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:840](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L840)
+Defined in: [Dev/projects/tags/libs/tags.ts:841](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L841)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 **Returns:** (`n`: *number*) => *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:897](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L897)
+Defined in: [Dev/projects/tags/libs/tags.ts:898](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L898)
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:835](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L835)
+Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L836)
 
 ▸ `Const` **bold**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -188,7 +188,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:835](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:835](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L835)
+Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L836)
 
 ▸ `Const` **bold**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -201,7 +201,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:835](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:835](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L835)
+Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L836)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L838)
+Defined in: [Dev/projects/tags/libs/tags.ts:839](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L839)
 
 ▸ `Const` **boldｰsans**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -229,7 +229,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L838)
+Defined in: [Dev/projects/tags/libs/tags.ts:839](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L839)
 
 ▸ `Const` **boldｰsans**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -242,7 +242,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L838)
+Defined in: [Dev/projects/tags/libs/tags.ts:839](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L839)
 
 ___
 
@@ -262,7 +262,7 @@ The `flush`tag removes all leading spaces (flushes text left).
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:457](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L457)
+Defined in: [Dev/projects/tags/libs/tags.ts:458](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L458)
 
 ▸ `Const` **flush**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -278,7 +278,7 @@ The `flush`tag removes all leading spaces (flushes text left).
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:457](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L457)
+Defined in: [Dev/projects/tags/libs/tags.ts:458](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L458)
 
 ▸ `Const` **flush**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -295,7 +295,7 @@ The `flush`tag removes all leading spaces (flushes text left).
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:457](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L457)
+Defined in: [Dev/projects/tags/libs/tags.ts:458](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L458)
 
 ___
 
@@ -317,7 +317,7 @@ The `fold` tag removes line breaks. If you want to remove first level indentatio
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:447](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L447)
+Defined in: [Dev/projects/tags/libs/tags.ts:448](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L448)
 
 ▸ `Const` **fold**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -335,7 +335,7 @@ The `fold` tag removes line breaks. If you want to remove first level indentatio
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:447](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L447)
+Defined in: [Dev/projects/tags/libs/tags.ts:448](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L448)
 
 ▸ `Const` **fold**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -354,7 +354,7 @@ The `fold` tag removes line breaks. If you want to remove first level indentatio
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:447](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L447)
+Defined in: [Dev/projects/tags/libs/tags.ts:448](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L448)
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:818](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L818)
+Defined in: [Dev/projects/tags/libs/tags.ts:819](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L819)
 
 ___
 
@@ -386,7 +386,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L837)
+Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L838)
 
 ▸ `Const` **fraktur**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -398,7 +398,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L837)
+Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L838)
 
 ▸ `Const` **fraktur**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -411,7 +411,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L837)
+Defined in: [Dev/projects/tags/libs/tags.ts:838](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L838)
 
 ___
 
@@ -432,7 +432,7 @@ This module uses it internally to stitch string literals and substitution expres
 
 a string that interleaves values into the strings array
 
-Defined in: [Dev/projects/tags/libs/tags.ts:387](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L387)
+Defined in: [Dev/projects/tags/libs/tags.ts:388](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L388)
 
 ▸ `Const` **identity**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -449,7 +449,7 @@ This module uses it internally to stitch string literals and substitution expres
 
 a string that interleaves values into the strings array
 
-Defined in: [Dev/projects/tags/libs/tags.ts:387](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L387)
+Defined in: [Dev/projects/tags/libs/tags.ts:388](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L388)
 
 ▸ `Const` **identity**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -467,7 +467,7 @@ This module uses it internally to stitch string literals and substitution expres
 
 a string that interleaves values into the strings array
 
-Defined in: [Dev/projects/tags/libs/tags.ts:387](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L387)
+Defined in: [Dev/projects/tags/libs/tags.ts:388](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L388)
 
 ___
 
@@ -487,7 +487,7 @@ The `indent` tag adds indentation to each line.
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:483](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L483)
+Defined in: [Dev/projects/tags/libs/tags.ts:484](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L484)
 
 ___
 
@@ -503,7 +503,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L836)
+Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L837)
 
 ▸ `Const` **italic**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -515,7 +515,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L836)
+Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L837)
 
 ▸ `Const` **italic**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -528,7 +528,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:836](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L836)
+Defined in: [Dev/projects/tags/libs/tags.ts:837](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L837)
 
 ___
 
@@ -545,7 +545,7 @@ ___
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:543](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L543)
+Defined in: [Dev/projects/tags/libs/tags.ts:544](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L544)
 
 ___
 
@@ -561,7 +561,7 @@ ___
 
 **Returns:** [*tagｰfunction*](interfaces/tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:513](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L513)
+Defined in: [Dev/projects/tags/libs/tags.ts:514](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L514)
 
 ___
 
@@ -580,7 +580,7 @@ ___
 
 **Returns:** *number*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:927](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L927)
+Defined in: [Dev/projects/tags/libs/tags.ts:928](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L928)
 
 ___
 
@@ -602,7 +602,7 @@ The `numbering` tag adds numbering to each line.
 
 numbered lines
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1030](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1030)
+Defined in: [Dev/projects/tags/libs/tags.ts:1031](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L1031)
 
 ___
 
@@ -618,7 +618,7 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1062](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1062)
+Defined in: [Dev/projects/tags/libs/tags.ts:1063](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L1063)
 
 ▸ `Const` **numberｰlines**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -630,7 +630,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:1062](https://github.com/jr-grenoble
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1062](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1062)
+Defined in: [Dev/projects/tags/libs/tags.ts:1063](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L1063)
 
 ▸ `Const` **numberｰlines**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -643,7 +643,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:1062](https://github.com/jr-grenoble
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:1062](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L1062)
+Defined in: [Dev/projects/tags/libs/tags.ts:1063](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L1063)
 
 ___
 
@@ -663,7 +663,7 @@ The `outdent`tag removes first level indentation.
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:469](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L469)
+Defined in: [Dev/projects/tags/libs/tags.ts:470](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L470)
 
 ▸ `Const` **outdent**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -679,7 +679,7 @@ The `outdent`tag removes first level indentation.
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:469](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L469)
+Defined in: [Dev/projects/tags/libs/tags.ts:470](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L470)
 
 ▸ `Const` **outdent**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -696,7 +696,7 @@ The `outdent`tag removes first level indentation.
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:469](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L469)
+Defined in: [Dev/projects/tags/libs/tags.ts:470](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L470)
 
 ___
 
@@ -716,7 +716,7 @@ The `paragraph` tag removes duplicate blank lines and returns a set of paragraph
 
 a string that interleaves values into the strings array and that removes extraneous blank lines.
 
-Defined in: [Dev/projects/tags/libs/tags.ts:433](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L433)
+Defined in: [Dev/projects/tags/libs/tags.ts:434](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L434)
 
 ▸ `Const` **paragraph**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -732,7 +732,7 @@ The `paragraph` tag removes duplicate blank lines and returns a set of paragraph
 
 a string that interleaves values into the strings array and that removes extraneous blank lines.
 
-Defined in: [Dev/projects/tags/libs/tags.ts:433](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L433)
+Defined in: [Dev/projects/tags/libs/tags.ts:434](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L434)
 
 ▸ `Const` **paragraph**(`strings`: [*templateｰstrings*](interfaces/template_strings.md), ...`values`: [*printable*](interfaces/printable.md)[]): *string*
 
@@ -749,7 +749,7 @@ The `paragraph` tag removes duplicate blank lines and returns a set of paragraph
 
 a string that interleaves values into the strings array and that removes extraneous blank lines.
 
-Defined in: [Dev/projects/tags/libs/tags.ts:433](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L433)
+Defined in: [Dev/projects/tags/libs/tags.ts:434](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L434)
 
 ___
 
@@ -766,7 +766,7 @@ ___
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:542](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L542)
+Defined in: [Dev/projects/tags/libs/tags.ts:543](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L543)
 
 ___
 
@@ -808,7 +808,7 @@ console.log ( raw(identity)`This is line1\nAnd this is line {1+1}` );
 // And this is line 2
 ```
 
-Defined in: [Dev/projects/tags/libs/tags.ts:427](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L427)
+Defined in: [Dev/projects/tags/libs/tags.ts:428](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L428)
 
 ___
 
@@ -825,7 +825,7 @@ ___
 
 **Returns:** (`n`: *number*, `s?`: *string*) => *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:857](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L857)
+Defined in: [Dev/projects/tags/libs/tags.ts:858](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L858)
 
 ___
 
@@ -841,4 +841,4 @@ ___
 
 **Returns:** [*chainableｰtagｰfunction*](interfaces/chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:571](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L571)
+Defined in: [Dev/projects/tags/libs/tags.ts:572](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L572)

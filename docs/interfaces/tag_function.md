@@ -1,4 +1,4 @@
-[Tags](../README.md) / [Exports](../modules.md) / tag%uFF70function
+[Tags](../README.md) / [Exports](../modules.md) / tagｰfunction
 
 # Interface: tagｰfunction
 
@@ -58,4 +58,4 @@ for more information
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:100](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L100)
+Defined in: [Dev/projects/tags/libs/tags.ts:101](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L101)

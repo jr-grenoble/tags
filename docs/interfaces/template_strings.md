@@ -1,4 +1,4 @@
-[Tags](../README.md) / [Exports](../modules.md) / template%uFF70strings
+[Tags](../README.md) / [Exports](../modules.md) / templateｰstrings
 
 # Interface: templateｰstrings
 
@@ -62,7 +62,7 @@ ___
 
 • **raw**: readonly *string*[]
 
-Defined in: [Dev/projects/tags/libs/tags.ts:81](https://github.com/jr-grenoble/tags/blob/a1f675c/libs/tags.ts#L81)
+Defined in: [Dev/projects/tags/libs/tags.ts:82](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L82)
 
 ## Methods
 

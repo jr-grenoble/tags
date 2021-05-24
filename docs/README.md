@@ -1,5 +1,7 @@
 Tags / [Exports](modules.md)
 
+---
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![repository: github](https://img.shields.io/badge/repo-tags-black.svg)](https://github.com/jr-grenoble/tags)
 [![builder: Gulp](https://img.shields.io/badge/builder-gulp-ff2000.svg)](https://gulpjs.com)
@@ -7,6 +9,8 @@ Tags / [Exports](modules.md)
 [![code style: Google](https://img.shields.io/badge/code_style-google-60ff40.svg)](https://github.com/google/gts)
 [![language: TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-0080ff.svg)](http://www.typescriptlang.org/)
 [![documentation: typedoc](https://img.shields.io/badge/doc_gen-typedoc-8000ff.svg)](https://typedoc.org)
+[![test: mocha](https://img.shields.io/badge/test-mocha-c29d7f.svg)](https://mochajs.org)
+[![assertions: chai](https://img.shields.io/badge/bdd-chai-a40802.svg)](https://www.chaijs.com/api/bdd/#method_string)
 [![spelling: cspell](https://img.shields.io/badge/spelling-cspell-40ff50.svg)](https://github.com/streetsidesoftware/vscode-spell-checker/)
 
 Note: this file is hardlinked into the root project directory.

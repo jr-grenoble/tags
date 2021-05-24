@@ -72,7 +72,8 @@
     // "listEmittedFiles": true, /* use this option to see what tsc generates */
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["libs/**/*.ts", "tests/**/*.ts", "*.ts"],
+  "include": ["./libs/**/*.ts", "./tests/**/*.test.ts", "./*.ts"],
+  "exclude": ["./tests/", "./node_modules/", "./dist/"],
   // run typedoc as: typedoc --watch --tsconfig tsconfig.json dist libs --theme markdown -name Tags
   "typedocOptions": {
     "entryPoints": ["libs/tags.ts"],
@@ -82,6 +83,6 @@
     "pretty": true,
     "readme": "README.md",
     "theme": "markdown",
-    "watch": true
+    "watch": false
   }
 }
