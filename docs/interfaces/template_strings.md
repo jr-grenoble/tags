@@ -7,7 +7,7 @@ the same string literals unprocessed for escape sequence.
 
 ## Hierarchy
 
-- *ReadonlyArray*<string\>
+- *TemplateStringsArray*
 
   ↳ **templateｰstrings**
 
@@ -52,7 +52,7 @@ the same string literals unprocessed for escape sequence.
 
 Gets the length of the array. This is a number one higher than the highest element defined in an array.
 
-Inherited from: ReadonlyArray.length
+Inherited from: TemplateStringsArray.length
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1090
 
@@ -62,7 +62,9 @@ ___
 
 • **raw**: readonly *string*[]
 
-Defined in: [Dev/projects/tags/libs/tags.ts:82](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L82)
+Overrides: TemplateStringsArray.raw
+
+Defined in: [Dev/projects/tags/libs/tags.ts:89](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L89)
 
 ## Methods
 
@@ -74,7 +76,7 @@ Iterator of values in the array.
 
 **Returns:** *IterableIterator*<string\>
 
-Inherited from: ReadonlyArray.\_\_@iterator
+Inherited from: TemplateStringsArray.\_\_@iterator
 
 Defined in: node_modules/typescript/lib/lib.es2015.iterable.d.ts:96
 
@@ -94,7 +96,7 @@ Combines two or more arrays.
 
 **Returns:** *string*[]
 
-Inherited from: ReadonlyArray.concat
+Inherited from: TemplateStringsArray.concat
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1103
 
@@ -110,7 +112,7 @@ Combines two or more arrays.
 
 **Returns:** *string*[]
 
-Inherited from: ReadonlyArray.concat
+Inherited from: TemplateStringsArray.concat
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1108
 
@@ -124,7 +126,7 @@ Returns an iterable of key, value pairs for every entry in the array
 
 **Returns:** *IterableIterator*<[*number*, *string*]\>
 
-Inherited from: ReadonlyArray.entries
+Inherited from: TemplateStringsArray.entries
 
 Defined in: node_modules/typescript/lib/lib.es2015.iterable.d.ts:101
 
@@ -151,7 +153,7 @@ Determines whether all the members of an array satisfy the specified test.
 
 **Returns:** this is readonly S[]
 
-Inherited from: ReadonlyArray.every
+Inherited from: TemplateStringsArray.every
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1140
 
@@ -168,7 +170,7 @@ Determines whether all the members of an array satisfy the specified test.
 
 **Returns:** *boolean*
 
-Inherited from: ReadonlyArray.every
+Inherited from: TemplateStringsArray.every
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1149
 
@@ -195,7 +197,7 @@ Returns the elements of an array that meet the condition specified in a callback
 
 **Returns:** S[]
 
-Inherited from: ReadonlyArray.filter
+Inherited from: TemplateStringsArray.filter
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1176
 
@@ -212,7 +214,7 @@ Returns the elements of an array that meet the condition specified in a callback
 
 **Returns:** *string*[]
 
-Inherited from: ReadonlyArray.filter
+Inherited from: TemplateStringsArray.filter
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1182
 
@@ -240,7 +242,7 @@ otherwise.
 
 **Returns:** *undefined* \| S
 
-Inherited from: ReadonlyArray.find
+Inherited from: TemplateStringsArray.find
 
 Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:352
 
@@ -255,7 +257,7 @@ Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:352
 
 **Returns:** *undefined* \| *string*
 
-Inherited from: ReadonlyArray.find
+Inherited from: TemplateStringsArray.find
 
 Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:353
 
@@ -277,7 +279,7 @@ otherwise.
 
 **Returns:** *number*
 
-Inherited from: ReadonlyArray.findIndex
+Inherited from: TemplateStringsArray.findIndex
 
 Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:364
 
@@ -305,7 +307,7 @@ specified depth.
 
 **Returns:** *FlatArray*<A, D\>[]
 
-Inherited from: ReadonlyArray.flat
+Inherited from: TemplateStringsArray.flat
 
 Defined in: node_modules/typescript/lib/lib.es2019.array.d.ts:52
 
@@ -335,7 +337,7 @@ This is identical to a map followed by flat with depth 1.
 
 **Returns:** U[]
 
-Inherited from: ReadonlyArray.flatMap
+Inherited from: TemplateStringsArray.flatMap
 
 Defined in: node_modules/typescript/lib/lib.es2019.array.d.ts:40
 
@@ -356,7 +358,7 @@ Performs the specified action for each element in an array.
 
 **Returns:** *void*
 
-Inherited from: ReadonlyArray.forEach
+Inherited from: TemplateStringsArray.forEach
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1164
 
@@ -377,7 +379,7 @@ Determines whether an array includes a certain element, returning true or false 
 
 **Returns:** *boolean*
 
-Inherited from: ReadonlyArray.includes
+Inherited from: TemplateStringsArray.includes
 
 Defined in: node_modules/typescript/lib/lib.es2016.array.include.d.ts:36
 
@@ -398,7 +400,7 @@ Returns the index of the first occurrence of a value in an array.
 
 **Returns:** *number*
 
-Inherited from: ReadonlyArray.indexOf
+Inherited from: TemplateStringsArray.indexOf
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1125
 
@@ -418,7 +420,7 @@ Adds all the elements of an array separated by the specified separator string.
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.join
+Inherited from: TemplateStringsArray.join
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1113
 
@@ -432,7 +434,7 @@ Returns an iterable of keys in the array
 
 **Returns:** *IterableIterator*<number\>
 
-Inherited from: ReadonlyArray.keys
+Inherited from: TemplateStringsArray.keys
 
 Defined in: node_modules/typescript/lib/lib.es2015.iterable.d.ts:106
 
@@ -453,7 +455,7 @@ Returns the index of the last occurrence of a specified value in an array.
 
 **Returns:** *number*
 
-Inherited from: ReadonlyArray.lastIndexOf
+Inherited from: TemplateStringsArray.lastIndexOf
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1131
 
@@ -480,7 +482,7 @@ Calls a defined callback function on each element of an array, and returns an ar
 
 **Returns:** U[]
 
-Inherited from: ReadonlyArray.map
+Inherited from: TemplateStringsArray.map
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1170
 
@@ -500,7 +502,7 @@ Calls the specified callback function for all the elements in an array. The retu
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.reduce
+Inherited from: TemplateStringsArray.reduce
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1188
 
@@ -515,7 +517,7 @@ Defined in: node_modules/typescript/lib/lib.es5.d.ts:1188
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.reduce
+Inherited from: TemplateStringsArray.reduce
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1189
 
@@ -538,7 +540,7 @@ Calls the specified callback function for all the elements in an array. The retu
 
 **Returns:** U
 
-Inherited from: ReadonlyArray.reduce
+Inherited from: TemplateStringsArray.reduce
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1195
 
@@ -558,7 +560,7 @@ Calls the specified callback function for all the elements in an array, in desce
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.reduceRight
+Inherited from: TemplateStringsArray.reduceRight
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1201
 
@@ -573,7 +575,7 @@ Defined in: node_modules/typescript/lib/lib.es5.d.ts:1201
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.reduceRight
+Inherited from: TemplateStringsArray.reduceRight
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1202
 
@@ -596,7 +598,7 @@ Calls the specified callback function for all the elements in an array, in desce
 
 **Returns:** U
 
-Inherited from: ReadonlyArray.reduceRight
+Inherited from: TemplateStringsArray.reduceRight
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1208
 
@@ -617,7 +619,7 @@ Returns a section of an array.
 
 **Returns:** *string*[]
 
-Inherited from: ReadonlyArray.slice
+Inherited from: TemplateStringsArray.slice
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1119
 
@@ -638,7 +640,7 @@ Determines whether the specified callback function returns true for any element 
 
 **Returns:** *boolean*
 
-Inherited from: ReadonlyArray.some
+Inherited from: TemplateStringsArray.some
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1158
 
@@ -652,7 +654,7 @@ Returns a string representation of an array. The elements are converted to strin
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.toLocaleString
+Inherited from: TemplateStringsArray.toLocaleString
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1098
 
@@ -666,7 +668,7 @@ Returns a string representation of an array.
 
 **Returns:** *string*
 
-Inherited from: ReadonlyArray.toString
+Inherited from: TemplateStringsArray.toString
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:1094
 
@@ -680,6 +682,6 @@ Returns an iterable of values in the array
 
 **Returns:** *IterableIterator*<string\>
 
-Inherited from: ReadonlyArray.values
+Inherited from: TemplateStringsArray.values
 
 Defined in: node_modules/typescript/lib/lib.es2015.iterable.d.ts:111

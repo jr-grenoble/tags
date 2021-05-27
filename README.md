@@ -3,15 +3,20 @@ Tags / [Exports](docs/modules.md)
 ---
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![repository: github](https://img.shields.io/badge/repo-tags-black.svg)](https://github.com/jr-grenoble/tags)
+
+For reference convenience, we list most of our dependencies here:
+
+[![assertions: chai](https://img.shields.io/badge/bdd-chai-a40802.svg)](https://www.chaijs.com/api/bdd)
 [![builder: Gulp](https://img.shields.io/badge/builder-gulp-ff2000.svg)](https://gulpjs.com)
-[![code style: prettier](https://img.shields.io/badge/format-prettier-ffff00.svg)](https://github.com/prettier/prettier)
-[![code style: Google](https://img.shields.io/badge/code_style-google-60ff40.svg)](https://github.com/google/gts)
-[![language: TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-0080ff.svg)](http://www.typescriptlang.org/)
 [![documentation: typedoc](https://img.shields.io/badge/doc_gen-typedoc-8000ff.svg)](https://typedoc.org)
-[![test: mocha](https://img.shields.io/badge/test-mocha-c29d7f.svg)](https://mochajs.org)
-[![assertions: chai](https://img.shields.io/badge/bdd-chai-a40802.svg)](https://www.chaijs.com/api/bdd/#method_string)
+[![editor: vscode](https://img.shields.io/badge/edit-vscode-0060ff.svg)](https://code.visualstudio.com/docs/editor/tasks)
+[![format: prettier](https://img.shields.io/badge/format-prettier-ffff00.svg)](https://github.com/prettier/prettier)
+[![language: TypeScript](https://img.shields.io/badge/%3C%2F%3E-typescript-0080ff.svg)](http://www.typescriptlang.org/)
+[![reference: vscode](https://img.shields.io/badge/ref-MDN-80a0ff.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+[![repository: github](https://img.shields.io/badge/repo-tags-black.svg)](https://github.com/jr-grenoble/tags)
 [![spelling: cspell](https://img.shields.io/badge/spelling-cspell-40ff50.svg)](https://github.com/streetsidesoftware/vscode-spell-checker/)
+[![style: Google](https://img.shields.io/badge/style-google-60ff40.svg)](https://github.com/google/gts)
+[![test: mocha](https://img.shields.io/badge/test-mocha-c29d7f.svg)](https://mochajs.org)
 
 Note: this file is hardlinked into the root project directory.
 
@@ -75,10 +80,13 @@ We **do not** capitalize types nor class names, there's no point doing so.
 To help spot arrays and collections, we give them plural identifiers, e.g.
 
 ```typescript
-const numberingｰoptions = {
+const numberingｰparameters = {
+  // a collection, hence the plural name
   startｰat: 1,
   padｰleft: 0,
 };
 
-const textｰlines = input.split("\n");
+const textｰlines = input.split("\n"); // an array, hence plural for lines
 ```
+
+Tag functions (and functions) are named with a verb, possibly qualified.

@@ -1,30 +1,30 @@
-[Tags](../README.md) / [Exports](../modules.md) / tagｰfunction
+[Tags](../README.md) / [Exports](../modules.md) / callableｰtagｰfunction
 
-# Interface: tagｰfunction
-
-Tag functions prefix template literals and access their constituents before processing them.
->
-A (plain) tag function must conforms to this interface. It gets template literal components via
-a `templateｰstrings` array along with a series of 'printable' expressions. The `templateｰstrings`
-array iterates over the string literals that surround printable `${expressions}`. By default, these
-string literals are processed for escape characters such as \n for newlines, but the array is
-augmented with a `raw` property that contains the unprocessed literals.
+# Interface: callableｰtagｰfunction
 
 ## Hierarchy
 
-- *Function*
+- [*tagｰfunction*](tag_function.md)
 
-  ↳ **tagｰfunction**
+  ↳ **callableｰtagｰfunction**
 
-  ↳↳ [*ctagｰfunction*](ctag_function.md)
-
-  ↳↳ [*callableｰtagｰfunction*](callable_tag_function.md)
-
-  ↳↳ [*chainableｰtagｰfunction*](chainable_tag_function.md)
+  ↳↳ [*parametrizableｰtagｰfunction*](parametrizable_tag_function.md)
 
 ## Callable
 
-▸ **tagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
+▸ **callableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *any*
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `stringｰliteralｰorｰexpression` | *string* |
+
+**Returns:** *any*
+
+Defined in: [Dev/projects/tags/libs/tags.ts:207](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L207)
+
+▸ **callableｰtagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
 The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
 call:
@@ -70,19 +70,20 @@ Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/
 
 ### Properties
 
-- [arguments](tag_function.md#arguments)
-- [caller](tag_function.md#caller)
-- [length](tag_function.md#length)
-- [name](tag_function.md#name)
-- [prototype](tag_function.md#prototype)
+- [arguments](callable_tag_function.md#arguments)
+- [callable](callable_tag_function.md#callable)
+- [caller](callable_tag_function.md#caller)
+- [length](callable_tag_function.md#length)
+- [name](callable_tag_function.md#name)
+- [prototype](callable_tag_function.md#prototype)
 
 ### Methods
 
-- [[Symbol.hasInstance]](tag_function.md#[symbol.hasinstance])
-- [apply](tag_function.md#apply)
-- [bind](tag_function.md#bind)
-- [call](tag_function.md#call)
-- [toString](tag_function.md#tostring)
+- [[Symbol.hasInstance]](callable_tag_function.md#[symbol.hasinstance])
+- [apply](callable_tag_function.md#apply)
+- [bind](callable_tag_function.md#bind)
+- [call](callable_tag_function.md#call)
+- [toString](callable_tag_function.md#tostring)
 
 ## Properties
 
@@ -90,9 +91,17 @@ Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/
 
 • **arguments**: *any*
 
-Inherited from: Function.arguments
+Inherited from: [tagｰfunction](tag_function.md).[arguments](tag_function.md#arguments)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:302
+
+___
+
+### callable
+
+• **callable**: *boolean*
+
+Defined in: [Dev/projects/tags/libs/tags.ts:209](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L209)
 
 ___
 
@@ -100,7 +109,7 @@ ___
 
 • **caller**: Function
 
-Inherited from: Function.caller
+Inherited from: [tagｰfunction](tag_function.md).[caller](tag_function.md#caller)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:303
 
@@ -110,7 +119,7 @@ ___
 
 • `Readonly` **length**: *number*
 
-Inherited from: Function.length
+Inherited from: [tagｰfunction](tag_function.md).[length](tag_function.md#length)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:299
 
@@ -122,7 +131,7 @@ ___
 
 Returns the name of the function. Function names are read-only and can not be changed.
 
-Inherited from: Function.name
+Inherited from: [tagｰfunction](tag_function.md).[name](tag_function.md#name)
 
 Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:97
 
@@ -132,7 +141,7 @@ ___
 
 • **prototype**: *any*
 
-Inherited from: Function.prototype
+Inherited from: [tagｰfunction](tag_function.md).[prototype](tag_function.md#prototype)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:298
 
@@ -156,7 +165,7 @@ A constructor function can control which objects are recognized as its instances
 
 **Returns:** *boolean*
 
-Inherited from: Function.\_\_@hasInstance
+Inherited from: [tagｰfunction](tag_function.md)
 
 Defined in: node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:162
 
@@ -177,7 +186,7 @@ Calls the function, substituting the specified object for the this value of the 
 
 **Returns:** *any*
 
-Inherited from: Function.apply
+Inherited from: [tagｰfunction](tag_function.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:278
 
@@ -199,7 +208,7 @@ The this object of the bound function is associated with the specified object, a
 
 **Returns:** *any*
 
-Inherited from: Function.bind
+Inherited from: [tagｰfunction](tag_function.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:293
 
@@ -220,7 +229,7 @@ Calls a method of an object, substituting another object for the current object.
 
 **Returns:** *any*
 
-Inherited from: Function.call
+Inherited from: [tagｰfunction](tag_function.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:285
 
@@ -234,6 +243,6 @@ Returns a string representation of a function.
 
 **Returns:** *string*
 
-Inherited from: Function.toString
+Inherited from: [tagｰfunction](tag_function.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:296

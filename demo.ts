@@ -1,6 +1,7 @@
 import {
   boldｰsans,
   chainableｰtagｰfunction,
+  ctagｰfunction,
   flush,
   fold,
   fraktur,
@@ -15,6 +16,7 @@ import {
   pretty,
   printable,
   raw,
+  serialize,
   tagｰfunction,
   wrap,
 } from "./libs/tags";
@@ -27,7 +29,7 @@ const log = (...args: printable[]) =>
     )
   );
 const test = (
-  tag: chainableｰtagｰfunction | tagｰfunction,
+  tag: chainableｰtagｰfunction | tagｰfunction | ctagｰfunction,
   text: string
 ): void => {
   log("\n———Test---\n", tag.name, "\n=>\n", tag`${text}`, "\n<=\n");
@@ -139,7 +141,43 @@ test(
 );
 test(
   identity,
-  pretty`Trying json on ${numberingｰoptions} and on ${[
+  serialize`➀ Trying json on ${numberingｰoptions} and on ${[
+    1, 2, 3,
+  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+);
+
+test(
+  identity,
+  serialize(
+    `➁ Trying json on ${numberingｰoptions} and on ${[
+      1, 2, 3,
+    ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+  )
+);
+
+test(
+  identity,
+  serialize({
+    indentation: 8,
+    filter: ["c", "d", "e"],
+  })`➂ Trying json on ${numberingｰoptions} and on ${[
+    1, 2, 3,
+  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+);
+
+test(
+  identity,
+  serialize(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
+    1, 2, 3,
+  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+);
+
+test(
+  identity,
+  serialize({
+    indentation: 8,
+    filter: ["c", "d", "e"],
+  })(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
     1, 2, 3,
   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
 );

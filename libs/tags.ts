@@ -81,11 +81,13 @@
  * The `templateｰstrings` type is basically an array of readonly strings augmented with a raw property that stores
  * the same string literals unprocessed for escape sequence.
  */
-export type templateｰstrings = TemplateStringsArray;
+// export type templateｰstrings = TemplateStringsArray;
 // export interface templateｰstrings extends ReadonlyArray < string > {
 //   raw: readonly string[]; // actually this is already in the TemplateStringsArray, we put it here for documentation
 // } // alias for template string arrays
-
+export interface templateｰstrings extends TemplateStringsArray {
+  raw: readonly string[];
+}
 /**
  * Tag functions must be passed printable expressions for substitution
  */
@@ -102,7 +104,8 @@ export interface printable {
  * string literals are processed for escape characters such as \n for newlines, but the array is
  * augmented with a `raw` property that contains the unprocessed literals.
  */
-export interface tagｰfunction {
+export interface tagｰfunction extends Function {
+  // [x: string]: any;
   /**
    * The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
    * call:
@@ -135,8 +138,75 @@ export interface tagｰfunction {
   (strings: templateｰstrings, ...values: printable[]): any;
 }
 
+/**
+ * Rename a function
+ * @param func - the function to rename
+ * @param name - the new name
+ * @returns the modified function
+ */
+const rename = <funcｰtype>(func: funcｰtype, name: string): funcｰtype =>
+  Object.defineProperty(func, "name", { value: name });
+
+interface tagｰoptions {
+  [k: string]: any;
+}
+export interface ctagｰfunction extends tagｰfunction {
+  (string: string): any;
+  (options?: tagｰoptions): ctagｰfunction;
+  (tag: tagｰfunction): ctagｰfunction;
+}
+
+type configurableｰtagｰfunction = (options?: tagｰoptions) => tagｰfunction;
+
+export const makeｰctag = (
+  tag: configurableｰtagｰfunction,
+  defaults: tagｰoptions
+): ctagｰfunction => {
+  const tagｰname = tag.name || "anonymousｰtag";
+  //
+  // @TODO check if SIGNATURE IS NEEDED
+  //
+  const stag = (...args: any[]): any => {
+    // ➊ no arguments => return tag resulting from default options
+    if (args.length === 0) return (tag as ctagｰfunction)(defaults);
+
+    // ➋ first argument is a string => apply tag to that string
+    if (typeof args[0] === "string")
+      return tag(defaults)(makeｰraw([args[0]], { raw: [args[0]] }));
+
+    // ➌ first argument is a function => compose it with the tag
+    if (typeof args[0] === "function") {
+      function composite(s: templateｰstrings, ...v: printable[]): string {
+        return tag(defaults)`${(args[0] as tagｰfunction)(s, ...v)}`;
+      }
+      rename(composite, `${tagｰname}(${args[0].name})`);
+      return composite;
+    }
+
+    // ➍ first argument is a templateｰstrings array => apply tag to template literal
+    if (
+      Array.isArray(args[0]) &&
+      Array.isArray((args[0] as unknown as templateｰstrings)?.raw)
+    ) {
+      const strings = args[0] as unknown as templateｰstrings;
+      args.shift();
+      return tag(defaults)(strings, ...args);
+    }
+
+    // ➎ the remaining case is a call to the parametrizable version
+    // Note that we create a new function each time it is called with explicit parameters…
+    // When a set of options is used often, the library user should alias the tag.
+    return makeｰctag(
+      rename(() => tag(args[0]), tagｰname),
+      {}
+    );
+  };
+  return rename(stag as ctagｰfunction, tagｰname);
+};
+
 export interface callableｰtagｰfunction extends tagｰfunction {
   (stringｰliteralｰorｰexpression: string): any;
+  callable: boolean;
 }
 
 const makeｰraw = (
@@ -147,29 +217,136 @@ const makeｰraw = (
     Object.assign(strings, rawｰstrings)
   );
 
+export const serialize = makeｰctag(
+  function serialize({
+    replacer,
+    filter,
+    indentation,
+  }: jsonｰoptions = {}): tagｰfunction {
+    let filterｰreplacer: typeof replacer;
+    if (filter && replacer) {
+      filter = filter.map((v) => v.toString());
+      filterｰreplacer = (key, value) =>
+        (filter as string[]).indexOf(key) >= 0 ? value : replacer?.(key, value);
+    } else filterｰreplacer = replacer;
+    return function (
+      strings: templateｰstrings,
+      ...values: printable[]
+    ): string {
+      return identity(
+        strings,
+        ...values.map((v) =>
+          // Would love to do this, but overloading cannot:
+          // JSON.stringify(v, replacer ?? filter, indentation)
+          filterｰreplacer
+            ? JSON.stringify(v, filterｰreplacer, indentation)
+            : JSON.stringify(v, filter, indentation)
+        )
+      );
+    };
+  },
+  { indentation: 2 }
+);
+
 export const makeｰcallable = (tag: tagｰfunction): callableｰtagｰfunction => {
   // Record the name of the callable tag, refusing nullish names
   const tagｰname = tag.name || "anoymousｰtag";
-  // The return function has 3 overload signatures:
+  // The return function has 2 overload signatures:
   function callable(strings: templateｰstrings, ...values: printable[]): any;
   function callable(stringｰliteral: string): any;
-  // Here is the overloaded function implementation
-  function callable(
+  function callable( // Here is the overloaded function implementation
     stringｰorｰstrings: string | templateｰstrings,
     ...values: printable[]
   ): any {
     if (typeof stringｰorｰstrings !== "string") {
       return tag(stringｰorｰstrings as templateｰstrings, ...values);
     }
-    return tag(
-      makeｰraw([stringｰorｰstrings], {
-        raw: [stringｰorｰstrings],
-      })
-    );
+    const strings = [stringｰorｰstrings]; // use same readonly object for strings and raw strings
+    return tag(makeｰraw(strings, { raw: strings }));
   }
   rename(callable, tagｰname);
+  callable.callable = true;
   return callable;
 };
+
+export interface parametrizableｰtagｰfunction<parameterｰtype extends object>
+  extends callableｰtagｰfunction {
+  (params?: parameterｰtype): parametrizableｰtagｰfunction<parameterｰtype>;
+  parametrizable: boolean;
+  defaultｰparameters: parameterｰtype;
+  actualｰparameters?: parameterｰtype;
+}
+
+export const makeｰparametrizable = <parameterｰtype extends object>(
+  parametrizableｰtag: (params: parameterｰtype) => tagｰfunction,
+  defaultｰparameters: parameterｰtype
+): parametrizableｰtagｰfunction<parameterｰtype> => {
+  // Record the name of the callable tag, refusing nullish names
+  const tagｰname = parametrizableｰtag.name || "anoymousｰtag";
+  // The return function has 3 overload signatures:
+  function parametrizable(
+    strings: templateｰstrings,
+    ...values: printable[]
+  ): any;
+  function parametrizable(stringｰliteral: string): any;
+  function parametrizable(
+    actualｰparameters?: parameterｰtype
+  ): parametrizableｰtagｰfunction<parameterｰtype>;
+  function parametrizable(...args: any[]): any {
+    const self = parametrizable as parametrizableｰtagｰfunction<parameterｰtype>;
+    const tag = self.actualｰparameters
+      ? parametrizableｰtag(self.actualｰparameters)
+      : parametrizableｰtag(self.defaultｰparameters);
+    // call with default parameters
+    if (args.length === 0) {
+      function composite(s: templateｰstrings, ...v: printable[]): string {
+        return tag`${(tag as tagｰfunction)(s, ...v)}`;
+      }
+      composite.actualｰparameters = defaultｰparameters;
+      rename(composite, `${tagｰname}(${JSON.stringify(defaultｰparameters)})`);
+      return composite;
+    }
+    // call with actual parameters
+    const params = args[0];
+    if (
+      args.length === 1 &&
+      !Array.isArray(params) &&
+      typeof params !== "string" &&
+      typeof params !== "function"
+    ) {
+      // function composite(s: templateｰstrings, ...v: printable[]): string {
+    }
+  }
+  // function parametrizable<parameterｰtype>( // Here is the overloaded function implementation
+  //   stringｰorｰstrings: string | templateｰstrings | parameterｰtype,
+  //   ...values: printable[]
+  // ): any {
+  //   if (typeof stringｰorｰstrings !== "string") {
+  //     return tag(stringｰorｰstrings as templateｰstrings, ...values);
+  //   }
+  //   const strings = [stringｰorｰstrings]; // use same readonly object for strings and raw strings
+  //   return tag(makeｰraw(strings, { raw: strings }));
+  // }
+  // rename( parametrizable, tagｰname );
+  // parametrizable.callable = true;
+  // parametrizable.parametrizable = true;
+  // switch (typeof defaultｰparameters) {
+  //   case "number":
+  //   case "string":
+  //   case "boolean":
+  //   case "undefined":
+  //     parametrizable.defaultｰparameters = defaultｰparameters;
+  //     break;
+  //   default:
+  //     // clone object, but beware, this doesn't clone functions nor dates nor complex structures
+  //     parametrizable.defaultｰparameters = JSON.parse(
+  //       JSON.stringify(defaultｰparameters)
+  //     );
+  // }
+  return parametrizable as parametrizableｰtagｰfunction<parameterｰtype>;
+};
+
+// makeｰparametrizable
 
 /**
  * @example
@@ -347,15 +524,6 @@ const minｰindentation = (lines: string[]): number =>
         indentation < min ? indentation : min,
       Infinity // start big to compute the minimum
     );
-
-/**
- * Rename a function
- * @param func - the function to rename
- * @param name - the new name
- * @returns the modified function
- */
-const rename = <funcｰtype>(func: funcｰtype, name: string): funcｰtype =>
-  Object.defineProperty(func, "name", { value: name });
 
 /**
  * Turn a `(string, ...value) => string` tag function into a function that can accept a

@@ -2,7 +2,7 @@
 
 # Interface: printable
 
-Tag functions must be passed printable expressions for substitution parameters
+Tag functions must be passed printable expressions for substitution
 
 ## Table of contents
 
@@ -18,4 +18,4 @@ Tag functions must be passed printable expressions for substitution parameters
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:89](https://github.com/jr-grenoble/tags/blob/d82fab7/libs/tags.ts#L89)
+Defined in: [Dev/projects/tags/libs/tags.ts:95](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L95)
