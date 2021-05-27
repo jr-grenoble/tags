@@ -147,15 +147,19 @@ export interface tagｰfunction extends Function {
 const rename = <funcｰtype>(func: funcｰtype, name: string): funcｰtype =>
   Object.defineProperty(func, "name", { value: name });
 
+// @todo add type = number or tag-option
 interface tagｰoptions {
   [k: string]: any;
 }
+
+// @todo rename this interfacce
 export interface ctagｰfunction extends tagｰfunction {
   (string: string): any;
   (options?: tagｰoptions): ctagｰfunction;
   (tag: tagｰfunction): ctagｰfunction;
 }
 
+// @todo rename this type
 type configurableｰtagｰfunction = (options?: tagｰoptions) => tagｰfunction;
 
 export const makeｰctag = (
