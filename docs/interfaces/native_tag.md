@@ -1,6 +1,6 @@
-[Tags](../README.md) / [Exports](../modules.md) / tagｰfunction
+[Tags](../README.md) / [Exports](../modules.md) / nativeｰtag
 
-# Interface: tagｰfunction
+# Interface: nativeｰtag
 
 Tag functions prefix template literals and access their constituents before processing them.
 >
@@ -14,9 +14,9 @@ augmented with a `raw` property that contains the unprocessed literals.
 
 - *Function*
 
-  ↳ **tagｰfunction**
+  ↳ **nativeｰtag**
 
-  ↳↳ [*ctagｰfunction*](ctag_function.md)
+  ↳↳ [*tag*](tag.md)
 
   ↳↳ [*callableｰtagｰfunction*](callable_tag_function.md)
 
@@ -24,7 +24,7 @@ augmented with a `raw` property that contains the unprocessed literals.
 
 ## Callable
 
-▸ **tagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
+▸ **nativeｰtag**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
 The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
 call:
@@ -53,7 +53,7 @@ the `identity` tag function receives 3 parameters:
 In fact, a tag function is not forced to return a string, it can return anything.
 
 **`see`** [MDN template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-for more information
+for more information.
 
 #### Parameters
 
@@ -64,25 +64,25 @@ for more information
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L107)
+Defined in: [Dev/projects/tags/libs/tags.ts:117](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L117)
 
 ## Table of contents
 
 ### Properties
 
-- [arguments](tag_function.md#arguments)
-- [caller](tag_function.md#caller)
-- [length](tag_function.md#length)
-- [name](tag_function.md#name)
-- [prototype](tag_function.md#prototype)
+- [arguments](native_tag.md#arguments)
+- [caller](native_tag.md#caller)
+- [length](native_tag.md#length)
+- [name](native_tag.md#name)
+- [prototype](native_tag.md#prototype)
 
 ### Methods
 
-- [[Symbol.hasInstance]](tag_function.md#[symbol.hasinstance])
-- [apply](tag_function.md#apply)
-- [bind](tag_function.md#bind)
-- [call](tag_function.md#call)
-- [toString](tag_function.md#tostring)
+- [[Symbol.hasInstance]](native_tag.md#[symbol.hasinstance])
+- [apply](native_tag.md#apply)
+- [bind](native_tag.md#bind)
+- [call](native_tag.md#call)
+- [toString](native_tag.md#tostring)
 
 ## Properties
 

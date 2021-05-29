@@ -18,4 +18,4 @@ Tag functions must be passed printable expressions for substitution
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:95](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L95)
+Defined in: [Dev/projects/tags/libs/tags.ts:105](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L105)

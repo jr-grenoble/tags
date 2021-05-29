@@ -88,16 +88,16 @@ to use an empty prefix before line numbers. Had we not done that, it would have 
 
 ## Hierarchy
 
-- [*tagｰfunction*](tag_function.md)
+- [*nativeｰtag*](native_tag.md)
 
   ↳ **chainableｰtagｰfunction**
 
 ## Callable
 
-▸ **chainableｰtagｰfunction**(`tagｰfunction`: [*tagｰfunction*](tag_function.md)): [*chainableｰtagｰfunction*](chainable_tag_function.md)
+▸ **chainableｰtagｰfunction**(`nativeｰtag`: [*nativeｰtag*](native_tag.md)): [*chainableｰtagｰfunction*](chainable_tag_function.md)
 
-The chainable tag function interface indicates that a `chainableｰtagｰfunction` behaves as a regular [`tagｰfunction`](tag_function.md)
-but can also take another `tagｰfunction` as input (for chaining) before applying itself to the template literal.
+The chainable tag function interface indicates that a `chainableｰtagｰfunction` behaves as a regular [`nativeｰtag`](native_tag.md)
+but can also take another `nativeｰtag` as input (for chaining) before applying itself to the template literal.
 >
 A `chainableｰtagｰfunction` can also process regular strings (either literals, variables or expressions), using the regular
 function call syntax.
@@ -106,11 +106,11 @@ function call syntax.
 
 | Name | Type |
 | :------ | :------ |
-| `tagｰfunction` | [*tagｰfunction*](tag_function.md) |
+| `nativeｰtag` | [*nativeｰtag*](native_tag.md) |
 
 **Returns:** [*chainableｰtagｰfunction*](chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:437](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L437)
+Defined in: [Dev/projects/tags/libs/tags.ts:508](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L508)
 
 ▸ **chainableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -124,7 +124,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:437](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:445](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L445)
+Defined in: [Dev/projects/tags/libs/tags.ts:516](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L516)
 
 ▸ **chainableｰtagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
@@ -155,7 +155,7 @@ the `identity` tag function receives 3 parameters:
 In fact, a tag function is not forced to return a string, it can return anything.
 
 **`see`** [MDN template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-for more information
+for more information.
 
 #### Parameters
 
@@ -166,7 +166,7 @@ for more information
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L107)
+Defined in: [Dev/projects/tags/libs/tags.ts:117](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L117)
 
 ## Table of contents
 
@@ -192,7 +192,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/
 
 • **arguments**: *any*
 
-Inherited from: [tagｰfunction](tag_function.md).[arguments](tag_function.md#arguments)
+Inherited from: [nativeｰtag](native_tag.md).[arguments](native_tag.md#arguments)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:302
 
@@ -202,7 +202,7 @@ ___
 
 • **caller**: Function
 
-Inherited from: [tagｰfunction](tag_function.md).[caller](tag_function.md#caller)
+Inherited from: [nativeｰtag](native_tag.md).[caller](native_tag.md#caller)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:303
 
@@ -212,7 +212,7 @@ ___
 
 • `Readonly` **length**: *number*
 
-Inherited from: [tagｰfunction](tag_function.md).[length](tag_function.md#length)
+Inherited from: [nativeｰtag](native_tag.md).[length](native_tag.md#length)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:299
 
@@ -224,7 +224,7 @@ ___
 
 Returns the name of the function. Function names are read-only and can not be changed.
 
-Inherited from: [tagｰfunction](tag_function.md).[name](tag_function.md#name)
+Inherited from: [nativeｰtag](native_tag.md).[name](native_tag.md#name)
 
 Defined in: node_modules/typescript/lib/lib.es2015.core.d.ts:97
 
@@ -234,7 +234,7 @@ ___
 
 • **prototype**: *any*
 
-Inherited from: [tagｰfunction](tag_function.md).[prototype](tag_function.md#prototype)
+Inherited from: [nativeｰtag](native_tag.md).[prototype](native_tag.md#prototype)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:298
 
@@ -258,7 +258,7 @@ A constructor function can control which objects are recognized as its instances
 
 **Returns:** *boolean*
 
-Inherited from: [tagｰfunction](tag_function.md)
+Inherited from: [nativeｰtag](native_tag.md)
 
 Defined in: node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:162
 
@@ -279,7 +279,7 @@ Calls the function, substituting the specified object for the this value of the 
 
 **Returns:** *any*
 
-Inherited from: [tagｰfunction](tag_function.md)
+Inherited from: [nativeｰtag](native_tag.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:278
 
@@ -301,7 +301,7 @@ The this object of the bound function is associated with the specified object, a
 
 **Returns:** *any*
 
-Inherited from: [tagｰfunction](tag_function.md)
+Inherited from: [nativeｰtag](native_tag.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:293
 
@@ -322,7 +322,7 @@ Calls a method of an object, substituting another object for the current object.
 
 **Returns:** *any*
 
-Inherited from: [tagｰfunction](tag_function.md)
+Inherited from: [nativeｰtag](native_tag.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:285
 
@@ -336,6 +336,6 @@ Returns a string representation of a function.
 
 **Returns:** *string*
 
-Inherited from: [tagｰfunction](tag_function.md)
+Inherited from: [nativeｰtag](native_tag.md)
 
 Defined in: node_modules/typescript/lib/lib.es5.d.ts:296

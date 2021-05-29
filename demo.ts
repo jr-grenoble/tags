@@ -1,13 +1,13 @@
 import {
   boldｰsans,
   chainableｰtagｰfunction,
-  ctagｰfunction,
   flush,
   fold,
   fraktur,
   identity,
   indent,
   italic,
+  nativeｰtag,
   numbering,
   numberingｰoptions,
   numberｰlines,
@@ -16,8 +16,9 @@ import {
   pretty,
   printable,
   raw,
+  rename,
   serialize,
-  tagｰfunction,
+  tag,
   wrap,
 } from "./libs/tags";
 
@@ -28,8 +29,8 @@ const log = (...args: printable[]) =>
       ""
     )
   );
-const test = (
-  tag: chainableｰtagｰfunction | tagｰfunction | ctagｰfunction,
+const test = <T>(
+  tag: chainableｰtagｰfunction | nativeｰtag | tag<T>,
   text: string
 ): void => {
   log("\n———Test---\n", tag.name, "\n=>\n", tag`${text}`, "\n<=\n");
@@ -173,7 +174,7 @@ test(
 );
 
 test(
-  identity,
+  rename(identity, "cowboy"),
   serialize({
     indentation: 8,
     filter: ["c", "d", "e"],

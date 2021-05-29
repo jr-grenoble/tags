@@ -64,14 +64,24 @@
  * | Types                             | Description                                                                                                    |
  * | :-------------------------------- | :------------------------------------------------------------------------------------------------------------- |
  * | {@linkcode chainableｰtagｰfunction}| A tag function that also accepts another tag function or a string as a parameter, for chaining or direct call  |
- * | {@linkcode tagｰfunction}          | A function that can be applied to a template string, i.e. that can prefix such a string                        |
+ * | {@linkcode nativeｰtag}            | A function that can be applied to a template string, i.e. that can prefix such a string                        |
  * | {@linkcode templateｰstrings}      | An array of readonly strings, augmented with a raw property to iterate over raw equivalent of these strings    |
  * | {@linkcode printable}             | Any expression that produces a printable result, i.e. that can be called with `.toString()`                    |
  * | {@linkcode numberingｰoptions}     | A set of options that allows control of the `numbering` tag as well as of `numberingｰcounter` objects          |
  *
  */
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
+/*
+ * ✅ @todo
+ * • use default parameters for space detection, line folding, blank line management.
+ *
+ * • provide a flush left and right mechanism (by default, flush is left) allowing justification left and right
+ *
+ * • provide options in outdent so that ${expressions} get processed (or not)
+ *
+ * • provide fixed decimal, engineering and scientific notation tag for ${expressions}, as well as more general number formatting
+ *
+ */
 
 // Type definitions /////////////////////////////////////////////////////////
 // Basic types and interfaces for tag functions.                           //
@@ -104,8 +114,7 @@ export interface printable {
  * string literals are processed for escape characters such as \n for newlines, but the array is
  * augmented with a `raw` property that contains the unprocessed literals.
  */
-export interface tagｰfunction extends Function {
-  // [x: string]: any;
+export interface nativeｰtag extends Function {
   /**
    * The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
    * call:
@@ -133,59 +142,118 @@ export interface tagｰfunction extends Function {
    *
    * In fact, a tag function is not forced to return a string, it can return anything.
    * @see [MDN template literals]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals}
-   * for more information
+   * for more information.
    */
   (strings: templateｰstrings, ...values: printable[]): any;
 }
 
 /**
- * Rename a function
- * @param func - the function to rename
- * @param name - the new name
- * @returns the modified function
+ * Tag options combine structured tag settings with boolean and number simple types.
+ * The string type is not included in these simple types because:
+ * - we use numeric pseudo enums to represemt options
+ * - we want tags to operate on strings the same way they do on template literals.
+ *
+ * When a tag requires additional options, it defines a type that extends `tagｰoptions`,
+ * and it creates a new default option constant, e.g. as:
+ *
+ * ```typescript
+ * type numberingｰoptions = tagｰoptions & {
+ *    readonly numberｰfrom?: number;
+ *    // … additional properties must be readonly and optional
+ * }
+ *
+ * const defaultｰnumberingｰoptions : numberingｰoptions = {
+ *    ...defaultｰtagｰoptions,
+ *    {
+ *      numberｰfrom: 1,
+ *      // … other defaults
+ *    }
+ * }
+ * ```
  */
-const rename = <funcｰtype>(func: funcｰtype, name: string): funcｰtype =>
-  Object.defineProperty(func, "name", { value: name });
+export type tagｰoptions =
+  | boolean
+  | number
+  | {
+      readonly whiteｰspace?: RegExp /** what is to be considered white space, default is /\s/g */;
+      readonly lineｰjoiner?: string /** how what to put between joined lines, default is a single space " " */;
+      readonly foldｰblankｰlinesʔ̣?: boolean /** whether to fold blank line sequences into a single one, default is true */;
+    };
 
-// @todo add type = number or tag-option
-interface tagｰoptions {
-  [k: string]: any;
+/**
+ * Default tag settings, used to initialize tag options in tag functions
+ * See the {@linkcode tagｰoptions} interface for definitions as well as
+ * for how to extend options and defaults.
+ */
+export const defaultｰtagｰoptions: tagｰoptions = {
+  whiteｰspace: /\s/g /** replace by `/ /g` to only handle real space */,
+  lineｰjoiner:
+    " " /** replace by ``""`` to remove any space between template literal lines */,
+  foldｰblankｰlinesʔ̣: true /** replace by `false` to preserve blank lines */,
+} as const;
+
+/**
+ * @todo thoroughly document!!!
+ */
+export interface tag<T extends tagｰoptions> extends nativeｰtag {
+  (string: string): any /** apply the base tag to a string */;
+  (options?: T): tag<T>;
+  (tag: nativeｰtag): nativeｰtag /** compose tags */;
 }
 
-// @todo rename this interfacce
-export interface ctagｰfunction extends tagｰfunction {
-  (string: string): any;
-  (options?: tagｰoptions): ctagｰfunction;
-  (tag: tagｰfunction): ctagｰfunction;
-}
+/**
+ * Rename anything that has a name
+ * @returns the modified object or function
+ *
+ * Note that this `rename` uses `Object.defineProperty` to set the name property of its target.
+ * This allows it to modify function names, cf.
+ * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name#inferred_function_names)
+ */
+export const rename = <type extends { name: string }>(
+  object: type /** the object or function to rename */,
+  name: string /** the new name */
+): type => Object.defineProperty(object, "name", { value: name });
 
-// @todo rename this type
-type configurableｰtagｰfunction = (options?: tagｰoptions) => tagｰfunction;
+/**
+ * Turn an array of readonly strings into a `templateｰstrings` array
+ * by adding a `raw` property to the initial array and assigning it
+ * the very same array of strings.
+ * @returns
+ */
+const makeｰraw = (
+  strings: readonly string[] // ReadonlyArray<string>,
+): templateｰstrings =>
+  <readonly string[] & { raw: readonly string[] }>(
+    Object.assign(strings, { raw: strings })
+  );
 
-export const makeｰctag = (
-  tag: configurableｰtagｰfunction,
-  defaults: tagｰoptions
-): ctagｰfunction => {
+/**
+ * @todo thoroughly document!!!
+ *
+ * @param tag
+ * @param defaults
+ * @returns
+ */
+export const makeｰtag = <T extends tagｰoptions>(
+  tag: (options?: T) => nativeｰtag,
+  defaults: T
+): tag<T> => {
   const tagｰname = tag.name || "anonymousｰtag";
-  //
-  // @TODO check if SIGNATURE IS NEEDED
-  //
-  const stag = (...args: any[]): any => {
-    // ➊ no arguments => return tag resulting from default options
-    if (args.length === 0) return (tag as ctagｰfunction)(defaults);
 
-    // ➋ first argument is a string => apply tag to that string
-    if (typeof args[0] === "string")
-      return tag(defaults)(makeｰraw([args[0]], { raw: [args[0]] }));
+  const stag = (...args: any[]): any => {
+    // ➊ no arguments => return native tag resulting from default options
+    if (args.length === 0) return tag(defaults);
+
+    // ➋ first argument is a string => apply the tag to that string
+    if (typeof args[0] === "string") return tag(defaults)(makeｰraw([args[0]]));
 
     // ➌ first argument is a function => compose it with the tag
-    if (typeof args[0] === "function") {
-      function composite(s: templateｰstrings, ...v: printable[]): string {
-        return tag(defaults)`${(args[0] as tagｰfunction)(s, ...v)}`;
-      }
-      rename(composite, `${tagｰname}(${args[0].name})`);
-      return composite;
-    }
+    if (typeof args[0] === "function")
+      return rename(
+        (s: templateｰstrings, ...v: printable[]): string =>
+          tag(defaults)`${(args[0] as nativeｰtag)(s, ...v)}`,
+        `${tagｰname}(${args[0].name})`
+      );
 
     // ➍ first argument is a templateｰstrings array => apply tag to template literal
     if (
@@ -200,33 +268,32 @@ export const makeｰctag = (
     // ➎ the remaining case is a call to the parametrizable version
     // Note that we create a new function each time it is called with explicit parameters…
     // When a set of options is used often, the library user should alias the tag.
-    return makeｰctag(
+    return makeｰtag(
       rename(() => tag(args[0]), tagｰname),
       {}
     );
   };
-  return rename(stag as ctagｰfunction, tagｰname);
+  return rename(stag as tag<T>, tagｰname);
 };
 
-export interface callableｰtagｰfunction extends tagｰfunction {
+export interface callableｰtagｰfunction extends nativeｰtag {
   (stringｰliteralｰorｰexpression: string): any;
   callable: boolean;
 }
 
-const makeｰraw = (
-  strings: ReadonlyArray<string>,
-  rawｰstrings: { raw: readonly string[] }
-): templateｰstrings =>
-  <ReadonlyArray<string> & { raw: readonly string[] }>(
-    Object.assign(strings, rawｰstrings)
-  );
+type serializeｰoptions = tagｰoptions & {
+  readonly indentation?: number | string;
+  readonly filter?: (number | string)[] | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly replacer?: (key: string, value: any) => any;
+};
 
-export const serialize = makeｰctag(
+export const serialize = makeｰtag<serializeｰoptions>(
   function serialize({
+    indentation,
     replacer,
     filter,
-    indentation,
-  }: jsonｰoptions = {}): tagｰfunction {
+  }: serializeｰoptions = {}): nativeｰtag {
     let filterｰreplacer: typeof replacer;
     if (filter && replacer) {
       filter = filter.map((v) => v.toString());
@@ -252,7 +319,7 @@ export const serialize = makeｰctag(
   { indentation: 2 }
 );
 
-export const makeｰcallable = (tag: tagｰfunction): callableｰtagｰfunction => {
+export const makeｰcallable = (tag: nativeｰtag): callableｰtagｰfunction => {
   // Record the name of the callable tag, refusing nullish names
   const tagｰname = tag.name || "anoymousｰtag";
   // The return function has 2 overload signatures:
@@ -266,7 +333,7 @@ export const makeｰcallable = (tag: tagｰfunction): callableｰtagｰfunction 
       return tag(stringｰorｰstrings as templateｰstrings, ...values);
     }
     const strings = [stringｰorｰstrings]; // use same readonly object for strings and raw strings
-    return tag(makeｰraw(strings, { raw: strings }));
+    return tag(makeｰraw(strings));
   }
   rename(callable, tagｰname);
   callable.callable = true;
@@ -282,7 +349,7 @@ export interface parametrizableｰtagｰfunction<parameterｰtype extends object
 }
 
 export const makeｰparametrizable = <parameterｰtype extends object>(
-  parametrizableｰtag: (params: parameterｰtype) => tagｰfunction,
+  parametrizableｰtag: (params: parameterｰtype) => nativeｰtag,
   defaultｰparameters: parameterｰtype
 ): parametrizableｰtagｰfunction<parameterｰtype> => {
   // Record the name of the callable tag, refusing nullish names
@@ -304,7 +371,7 @@ export const makeｰparametrizable = <parameterｰtype extends object>(
     // call with default parameters
     if (args.length === 0) {
       function composite(s: templateｰstrings, ...v: printable[]): string {
-        return tag`${(tag as tagｰfunction)(s, ...v)}`;
+        return tag`${(tag as nativeｰtag)(s, ...v)}`;
       }
       composite.actualｰparameters = defaultｰparameters;
       rename(composite, `${tagｰname}(${JSON.stringify(defaultｰparameters)})`);
@@ -329,7 +396,7 @@ export const makeｰparametrizable = <parameterｰtype extends object>(
   //     return tag(stringｰorｰstrings as templateｰstrings, ...values);
   //   }
   //   const strings = [stringｰorｰstrings]; // use same readonly object for strings and raw strings
-  //   return tag(makeｰraw(strings, { raw: strings }));
+  //   return tag(makeｰraw(strings));
   // }
   // rename( parametrizable, tagｰname );
   // parametrizable.callable = true;
@@ -438,15 +505,15 @@ export const makeｰparametrizable = <parameterｰtype extends object>(
  * │₁₁│And this is the last line.
  * ```
  */
-export interface chainableｰtagｰfunction extends tagｰfunction {
+export interface chainableｰtagｰfunction extends nativeｰtag {
   /**
-   * The chainable tag function interface indicates that a `chainableｰtagｰfunction` behaves as a regular {@linkcode tagｰfunction}
-   * but can also take another `tagｰfunction` as input (for chaining) before applying itself to the template literal.
+   * The chainable tag function interface indicates that a `chainableｰtagｰfunction` behaves as a regular {@linkcode nativeｰtag}
+   * but can also take another `nativeｰtag` as input (for chaining) before applying itself to the template literal.
    * >
    * A `chainableｰtagｰfunction` can also process regular strings (either literals, variables or expressions), using the regular
    * function call syntax.
    */
-  (tagｰfunction: tagｰfunction): chainableｰtagｰfunction;
+  (nativeｰtag: nativeｰtag): chainableｰtagｰfunction;
 
   /**
    * {@see {@linkcode chainableｰtagｰfunction}}
@@ -457,10 +524,9 @@ export interface chainableｰtagｰfunction extends tagｰfunction {
 /**
  * When creating a {@linkcode numberingｰcounter}, we pass it severall options, cf. detailed properties.
  */
-export interface numberingｰoptions {
-  /** try */
+export type numberingｰoptions = tagｰoptions & {
+  /** where to start numbering from, default is 1 */
   numberｰfrom?: number;
-  /** 2 */
   prefix?: string;
   suffix?: string;
   prefixｰzero?: string;
@@ -470,7 +536,7 @@ export interface numberingｰoptions {
   padｰzeroｰwith?: string | number;
   numberingｰscheme?: keyof typeof numberingｰschemes;
   signｰall?: boolean;
-}
+};
 
 // Utility functions ////////////////////////////////////////////////////////
 // Common code across tag functions; some of this is generic though.       //
@@ -491,7 +557,7 @@ const textｰlines = (text: string): string[] =>
     // fold multiple spaces
     .map((line) => line.replace(/(\S)\s+/g, "$1 "))
     // remove double blank lines
-    .reduce(
+    .reduce<string[]>(
       (
         textｰlines: string[],
         line: string,
@@ -556,23 +622,23 @@ const minｰindentation = (lines: string[]): number =>
  * @param tag - the tag function to be made chainable and callable on strings
  * @returns a chainable and string callable tag function
  */
-const makeｰchainable = (tag: tagｰfunction): chainableｰtagｰfunction => {
+const makeｰchainable = (tag: nativeｰtag): chainableｰtagｰfunction => {
   // Record the name of the chainable tag, refusing nullish names
   const tagｰname = tag.name || "anoymousｰtag";
   // The return function has 3 overload signatures:
   function chainable(strings: templateｰstrings, ...values: printable[]): string;
-  function chainable(tag: tagｰfunction): chainableｰtagｰfunction;
+  function chainable(tag: nativeｰtag): chainableｰtagｰfunction;
   function chainable(stringｰliteral: string): string;
   // Here is the overloaded function implementation
   function chainable(
-    stringsｰorｰtag: tagｰfunction | string | templateｰstrings,
+    stringsｰorｰtag: nativeｰtag | string | templateｰstrings,
     ...values: printable[]
-  ): tagｰfunction | string {
+  ): nativeｰtag | string {
     switch (typeof stringsｰorｰtag) {
       case "function": {
         // eslint-disable-next-line no-inner-declarations
         function composite(s: templateｰstrings, ...v: printable[]): string {
-          return tag`${(stringsｰorｰtag as tagｰfunction)(s, ...v)}`;
+          return tag`${(stringsｰorｰtag as nativeｰtag)(s, ...v)}`;
         }
         rename(composite, `${tagｰname}(${stringsｰorｰtag.name})`);
         return composite;
@@ -637,7 +703,7 @@ export const identity: chainableｰtagｰfunction = makeｰchainable(
  * // And this is line 2
  * ```
  */
-export const raw: tagｰfunction = rename(String.raw, "raw");
+export const raw: nativeｰtag = rename(String.raw, "raw");
 
 /**
  * The `paragraph` tag removes duplicate blank lines and returns a set of paragraphs separated by single blank lines.
@@ -727,7 +793,7 @@ export const jsonize = ({
   replacer,
   filter,
   indentation,
-}: jsonｰoptions = {}): tagｰfunction => {
+}: jsonｰoptions = {}): nativeｰtag => {
   let filterｰreplacer: typeof replacer;
   if (filter && replacer) {
     filter = filter.map((v) => v.toString());

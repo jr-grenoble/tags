@@ -26,7 +26,7 @@
 
 **Returns:** [*parametrizableｰtagｰfunction*](parametrizable_tag_function.md)<parameterｰtype\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:273](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L273)
+Defined in: [Dev/projects/tags/libs/tags.ts:344](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L344)
 
 ▸ **parametrizableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *any*
 
@@ -38,7 +38,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:273](https://github.com/jr-grenoble/
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:207](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L207)
+Defined in: [Dev/projects/tags/libs/tags.ts:279](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L279)
 
 ▸ **parametrizableｰtagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
@@ -69,7 +69,7 @@ the `identity` tag function receives 3 parameters:
 In fact, a tag function is not forced to return a string, it can return anything.
 
 **`see`** [MDN template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-for more information
+for more information.
 
 #### Parameters
 
@@ -80,7 +80,7 @@ for more information
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L107)
+Defined in: [Dev/projects/tags/libs/tags.ts:117](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L117)
 
 ## Table of contents
 
@@ -110,7 +110,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:107](https://github.com/jr-grenoble/
 
 • `Optional` **actualｰparameters**: parameterｰtype
 
-Defined in: [Dev/projects/tags/libs/tags.ts:277](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L277)
+Defined in: [Dev/projects/tags/libs/tags.ts:348](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L348)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 Inherited from: [callableｰtagｰfunction](callable_tag_function.md).[callable](callable_tag_function.md#callable)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:209](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L209)
+Defined in: [Dev/projects/tags/libs/tags.ts:281](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L281)
 
 ___
 
@@ -148,7 +148,7 @@ ___
 
 • **defaultｰparameters**: parameterｰtype
 
-Defined in: [Dev/projects/tags/libs/tags.ts:276](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L276)
+Defined in: [Dev/projects/tags/libs/tags.ts:347](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L347)
 
 ___
 
@@ -178,7 +178,7 @@ ___
 
 • **parametrizable**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:275](https://github.com/jr-grenoble/tags/blob/37448b8/libs/tags.ts#L275)
+Defined in: [Dev/projects/tags/libs/tags.ts:346](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L346)
 
 ___
 

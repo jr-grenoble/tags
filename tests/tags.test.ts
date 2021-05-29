@@ -27,7 +27,7 @@ import { expect } from "chai";
 import type {
   callableｰtagｰfunction,
   printable,
-  tagｰfunction,
+  nativeｰtag,
   templateｰstrings,
 } from "../libs/tags";
 import { makeｰcallable } from "../libs/tags";
@@ -38,7 +38,7 @@ describe("tag types", () => {
     number: number;
   };
   // Return an object containing all strings joined by newlines and 42 plus the sum of its parameters
-  const simpleｰtag: tagｰfunction = function simpleｰtag(
+  const simpleｰtag: nativeｰtag = function simpleｰtag(
     strings: templateｰstrings,
     ...values: printable[]
   ): tagｰoutput {
