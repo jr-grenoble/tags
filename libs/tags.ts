@@ -29,19 +29,19 @@
  * This library module provides chainable tag functions (or simply _tags_)to modify template literals, along with a few utility functions.
  *
  * - Refer to [MDN template literals]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals} for explanations
- * about basic (non chainable) tag functions ;
+ * about native (non chainable) tag functions ;
  * - Refer also to the much more complete [common-tags]{@linkcode https://github.com/zspecza/common-tags} package.
  *
  * Tags allow for prefixing template literals, e.g. as in ```format("bold")`Some ${expression} followed by text`⁠ ```.
  *
- * Tags implementation
- * -------------------
- * Tag function _implementations_ take one mandatory parameter, a `templateｰstrings` array of string literals, and optional printable values.
+ * Native tags implementation
+ * --------------------------
+ * Native tag function _implementations_ take one mandatory parameter, a `templateｰstrings` array of string literals, and optional printable values.
  * By default (cf. the `identity` tag), the template string is rendered by interleaving the printable values between the template
  * string literals. Hence, a proper call to a tag function must pass one more string literal than there are values.
  *
- * Chainable tags
- * --------------
+ * (Chainable) tags
+ * ----------------
  * Chainable tag functions allow for composing tags to perform more complex tasks, as in
  * ```typescript
  * indent(4)(paragraph)`Some ${expression}`⁠
@@ -51,7 +51,7 @@
  * ```typescript
  * indent(4)(paragraph)("Some very long string, abbreviated here for documentation purpose")
  * ```
- * See the {@linkcode chainableｰtagｰfunction} type for further explanations.
+ * See the {@linkcode tag} type for further explanations.
  * ________
  *
  * Tags library
@@ -63,11 +63,11 @@
  *
  * | Types                             | Description                                                                                                    |
  * | :-------------------------------- | :------------------------------------------------------------------------------------------------------------- |
- * | {@linkcode chainableｰtagｰfunction}| A tag function that also accepts another tag function or a string as a parameter, for chaining or direct call  |
  * | {@linkcode nativeｰtag}            | A function that can be applied to a template string, i.e. that can prefix such a string                        |
- * | {@linkcode templateｰstrings}      | An array of readonly strings, augmented with a raw property to iterate over raw equivalent of these strings    |
- * | {@linkcode printable}             | Any expression that produces a printable result, i.e. that can be called with `.toString()`                    |
  * | {@linkcode numberingｰoptions}     | A set of options that allows control of the `numbering` tag as well as of `numberingｰcounter` objects          |
+ * | {@linkcode printable}             | Any expression that produces a printable result, i.e. that can be called with `.toString()`                    |
+ * | {@linkcode tag}                   | A tag function that also accepts another tag function or a string as a parameter, for chaining or direct call  |
+ * | {@linkcode templateｰstrings}      | An array of readonly strings, augmented with a raw property to iterate over raw equivalent of these strings    |
  *
  */
 
@@ -91,12 +91,8 @@
  * The `templateｰstrings` type is basically an array of readonly strings augmented with a raw property that stores
  * the same string literals unprocessed for escape sequence.
  */
-// export type templateｰstrings = TemplateStringsArray;
-// export interface templateｰstrings extends ReadonlyArray < string > {
-//   raw: readonly string[]; // actually this is already in the TemplateStringsArray, we put it here for documentation
-// } // alias for template string arrays
 export interface templateｰstrings extends TemplateStringsArray {
-  raw: readonly string[];
+  raw: readonly string[] /** We redefine the raw property here, mainly for readability */;
 }
 /**
  * Tag functions must be passed printable expressions for substitution
@@ -106,9 +102,9 @@ export interface printable {
 }
 
 /**
- * Tag functions prefix template literals and access their constituents before processing them.
+ * Native tag functions prefix template literals and access their constituents before processing them.
  * >
- * A (plain) tag function must conforms to this interface. It gets template literal components via
+ * A native tag function must conforms to this interface. It gets template literal components via
  * a `templateｰstrings` array along with a series of 'printable' expressions. The `templateｰstrings`
  * array iterates over the string literals that surround printable `${expressions}`. By default, these
  * string literals are processed for escape characters such as \n for newlines, but the array is
@@ -164,10 +160,8 @@ export interface nativeｰtag extends Function {
  *
  * const defaultｰnumberingｰoptions : numberingｰoptions = {
  *    ...defaultｰtagｰoptions,
- *    {
- *      numberｰfrom: 1,
- *      // … other defaults
- *    }
+ *    numberｰfrom: 1,
+ *    // … other defaults
  * }
  * ```
  */
@@ -176,8 +170,9 @@ export type tagｰoptions =
   | number
   | {
       readonly whiteｰspace?: RegExp /** what is to be considered white space, default is /\s/g */;
-      readonly lineｰjoiner?: string /** how what to put between joined lines, default is a single space " " */;
+      readonly lineｰjoiner?: string /** what to put between joined lines, default is a single space " " */;
       readonly foldｰblankｰlinesʔ̣?: boolean /** whether to fold blank line sequences into a single one, default is true */;
+      readonly trimｰtrailingｰspace?: boolean /** whether to remove trailing space, default is true */;
     };
 
 /**
@@ -187,17 +182,102 @@ export type tagｰoptions =
  */
 export const defaultｰtagｰoptions: tagｰoptions = {
   whiteｰspace: /\s/g /** replace by `/ /g` to only handle real space */,
-  lineｰjoiner:
-    " " /** replace by ``""`` to remove any space between template literal lines */,
+  lineｰjoiner: " " /** replace by ``""`` to remove all space between lines */,
   foldｰblankｰlinesʔ̣: true /** replace by `false` to preserve blank lines */,
+  trimｰtrailingｰspace:
+    true /** replace by `false` to preserve trailing space */,
 } as const;
 
 /**
- * @todo thoroughly document!!!
+ * @example
+ * We extend native tag functions so that they can be chained and also so that you can call them on regular strings.
+ * We also allow these new tag functions to be parametrized via {@linkcode tagｰoptions}
+ * >
+ * When you compose chaianable tags, the innermost (deepest) tag is applied first, followed by tags of lesser depth,
+ * until the outermost tag is called. For instance, if you log the following expression:
+ *
+ * ```typescript
+ *  numbering({ prefix: "" })(paragraph(outdent))`
+ *         This is some text with π = ${Math.PI}.
+ *         This line has the same indentation as the previous one.
+ *             This line has deeper indentation.
+ *             This one too. There are 2 blank lines next.
+ *
+ *
+ *         This line has the initial indentation level.
+ *         And this is the last line.
+ *         `;
+ * ```
+ * You get the following console output:
+ * ```
+ *  ₁│This is some text with π = 3.141592653589793.
+ *  ₂│
+ *  ₃│This line has the same indentation as the previous one.
+ *  ₄│
+ *  ₅│    This line has deeper indentation.
+ *  ₆│
+ *  ₇│    This one too. There are 2 blank lines next.
+ *  ₈│
+ *  ₉│This line has the initial indentation level.
+ * ₁₀│
+ * ₁₁│And this is the last line.
+ * ```
+ * Let's decompose this. The chainable tags are `numbering({ prefix: "" })(paragraph(outdent))`,
+ * with the deepest tag (at the end of the chain) being the `outdent` tag. Thus the `outdent` tag
+ * is the first to process the template literal.
+ * >
+ * This tag takes a template literal and removes as many spaces from the left of each line as there are in
+ *  the least indented line(this tag is useful to keep code properly indented). In the example above, `outdent`
+ * produces the following output:
+ * ```
+ * This is some text with π = 3.141592653589793.
+ * This line has the same indentation as the previous one.
+ *     This line has deeper indentation.
+ *     This one too. There are 2 blank lines next.
+ *
+ * This line has the initial indentation level.
+ * And this is the last line.
+ *
+ * ```
+ * Note that the last line of output is blank, as `outdent` only folds blank lines but doesn't remove trailing ones.
+ * >
+ * Once the `outdent` tag has finished its job (expanding expressions such `Math.PI` in the process), the next tag
+ * in line is the `paragraph` tag. This tag simply takes each line and inserts blank lines around it, then it folds
+ * blank lines and removes trailing blank lines. When passed the previous output, it yields:
+ * ```
+ * This is some text with π = 3.141592653589793.
+ *
+ * This line has the same indentation as the previous one.
+ *
+ *     This line has deeper indentation.
+ *
+ *     This one too. There are 2 blank lines next.
+ *
+ * This line has the initial indentation level.
+ *
+ * And this is the last line.
+ * ```
+ * You can see that each input line has become a single paragraph.
+ * >
+ * Finally, the shallowest tag is the `numbering` tag. This tag takes some options, in this case, we tell it
+ * to use an empty prefix before line numbers. Had we not done that, it would have produced the following output:
+ * ```
+ * │ ₁│This is some text with π = 3.141592653589793.
+ * │ ₂│
+ * │ ₃│This line has the same indentation as the previous one.
+ * │ ₄│
+ * │ ₅│    This line has deeper indentation.
+ * │ ₆│
+ * │ ₇│    This one too.
+ * │ ₈│
+ * │ ₉│This line has the initial indentation level.
+ * │₁₀│
+ * │₁₁│And this is the last line.
+ * ```
  */
 export interface tag<T extends tagｰoptions> extends nativeｰtag {
   (string: string): any /** apply the base tag to a string */;
-  (options?: T): tag<T>;
+  (options?: T): tag<T> /** create a new tag function out of options */;
   (tag: nativeｰtag): nativeｰtag /** compose tags */;
 }
 
@@ -205,7 +285,7 @@ export interface tag<T extends tagｰoptions> extends nativeｰtag {
  * Rename anything that has a name
  * @returns the modified object or function
  *
- * Note that this `rename` uses `Object.defineProperty` to set the name property of its target.
+ * Note that `rename` uses `Object.defineProperty` to set the name property of its target.
  * This allows it to modify function names, cf.
  * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name#inferred_function_names)
  */
@@ -214,11 +294,15 @@ export const rename = <type extends { name: string }>(
   name: string /** the new name */
 ): type => Object.defineProperty(object, "name", { value: name });
 
+// Internal utilities  //////////////////////////////////////////////////////
+// These utilities perform common work.                                    //
+/////////////////////////////////////////////////////////////////////////////
+
 /**
  * Turn an array of readonly strings into a `templateｰstrings` array
  * by adding a `raw` property to the initial array and assigning it
  * the very same array of strings.
- * @returns
+ * @returns a `templateｰstring` array
  */
 const makeｰraw = (
   strings: readonly string[] // ReadonlyArray<string>,
@@ -270,11 +354,168 @@ export const makeｰtag = <T extends tagｰoptions>(
     // When a set of options is used often, the library user should alias the tag.
     return makeｰtag(
       rename(() => tag(args[0]), tagｰname),
-      {}
+      {} // no defaults for this new tag
     );
   };
   return rename(stag as tag<T>, tagｰname);
 };
+
+const ထ = Infinity;
+// type dimensions = {
+//   minｰindentation: number;
+//   maxｰlineｰlength: number;
+// };
+const dimensions = (lines: string[], options: tagｰoptions) => {
+  const dimensions = {
+    maxｰlineｰlength: 0,
+    minｰlineｰlength: +ထ,
+    maxｰindentation: 0,
+    minｰindentation: +ထ,
+    maxｰtrailingｰspace: 0,
+    minｰtrailingｰspace: +ထ,
+  };
+
+  // whiteｰspace?: RegExp /** what is to be considered white space, default is /\s/g */;
+  // lineｰjoiner?: string /**  what to put between joined lines, default is a single space " " */;
+  // foldｰblankｰlinesʔ̣?: boolean /** whether to fold blank line sequences into a single one, default is true */;
+  // trimｰtrailingｰspace?: boolean /** whet
+
+  return dimensions;
+};
+
+/**
+ * Split text into lines, removing trailing white space and double blank lines
+ *
+ * @param text - the original text
+ * @returns an array of lines without trailing whitespace
+ */
+const textｰlines = (text: string): string[] =>
+  text
+    // split into lines
+    .split("\n")
+    // trim lines at end
+    .map((line) => line.replace(/\s*$/, ""))
+    // fold multiple spaces
+    .map((line) => line.replace(/(\S)\s+/g, "$1 "))
+    // remove double blank lines
+    .reduce<string[]>(
+      (
+        textｰlines: string[],
+        line: string,
+        index: number,
+        source: string[]
+      ): string[] =>
+        line || (index > 0 && source[index - 1]?.trim()) // useless ?. accessor, due to TS limitation
+          ? // if the line is not blank or if it is the first one after a blank one, we keep it
+            textｰlines.concat(line)
+          : // otherwise, we skip it
+            textｰlines,
+      []
+    );
+/**
+ * Compute the minimum indentation level (in number of space characters) of a set of lines.
+ * If lines start with non-blank characters, this is 0.
+ * Otherwise, this is the minimum amount of spaces before any non-blank character.
+ *
+ * @param lines - the set of lines
+ * @returns the minimum indentation
+ */
+
+const minｰindentation = (lines: string[]): number =>
+  lines
+    // ignore blank lines
+    .filter((line) => line.trim())
+    // keep leading space…
+    .map((line) => line.match(/ */))
+    // …and count how many space characters there are
+    .map((spaces) => (spaces && spaces[0]?.length) ?? 0)
+    // then find the minimum indentation level
+    .reduce(
+      (min: number, indentation: number) =>
+        indentation < min ? indentation : min,
+      +ထ // start big to compute the minimum
+    );
+
+/**
+ * @todo document! The idea is to split template strings when there's a newline
+ * and adjust the values accordingly, by inserting empty strings.
+ *
+ * @returns a tuple of arrays, the first one being strings, the second being printable values.
+ *
+ * `normalizeｰstringsｰandｰvalues` warrants that ????
+ */
+const normalizeｰstringsｰandｰvalues = (
+  strings: templateｰstrings,
+  values: printable[]
+): [string[], (printable | undefined)[]] => {
+  return strings.reduce<[string[], (printable | undefined)[]]>(
+    ([newｰstrings, newｰvalues], s, index) => {
+      const lines = s.split("\n");
+      const len = lines.length;
+      if (len <= 1)
+        return [
+          [...newｰstrings, s],
+          [...newｰvalues, values[index]],
+        ];
+      if (len >= 2) newｰvalues = newｰvalues.concat(Array(len - 2).fill(""));
+      return [
+        [
+          ...newｰstrings,
+          ...lines
+            .filter((_, index) => index !== len - 1)
+            .map((line) => line + "\n"),
+        ],
+        [...newｰvalues, values[index]],
+      ];
+    },
+    [[], []]
+  );
+};
+
+// Tag functions ////////////////////////////////////////////////////////////
+// We define tag functions along with their options.                       //
+/////////////////////////////////////////////////////////////////////////////
+
+export type identityｰoptions = tagｰoptions & {
+  readonly indentｰvalues?: boolean /** whether ${expressions} must be indented the same as embedding text, default is true */;
+};
+
+export const defaultｰidentityｰoptions: identityｰoptions = {
+  ...defaultｰtagｰoptions,
+  indentｰvalues:
+    true /** replace by false, if you want `identity` to ignore indentation */,
+};
+
+export const identity = makeｰtag<identityｰoptions>(
+  function identity({ indentｰvalues }: identityｰoptions = {}): nativeｰtag {
+    return function (
+      strings: templateｰstrings,
+      ...values: printable[]
+    ): string {
+      if (strings.length > values.length) values.push(""); // make sure |strings| === |values|
+      if (!indentｰvalues)
+        return strings.reduce<string>(
+          (text, s, i) => `${text}${s}${values[i]}`,
+          ""
+        );
+      // normalize strings by splitting them into lines delimited by \n
+      // [strings, values] = normalize(strings, values);
+      const [str, val] = normalizeｰstringsｰandｰvalues(strings, values);
+      // now map values to
+
+      //         const indentation = minｰindentation(lines);
+      //   // remove that minimum indentation from all lines
+      //   return lines.map((line) => line.slice(indentation)).join("\n");
+
+      return "not implemented";
+    };
+  },
+  { indentｰvalues: true }
+);
+
+// Legacy code ////////////////////////////////////////////////////////
+// Common code across tag functions; some of this is generic though.       //
+/////////////////////////////////////////////////////////////////////////////
 
 export interface callableｰtagｰfunction extends nativeｰtag {
   (stringｰliteralｰorｰexpression: string): any;
@@ -538,63 +779,6 @@ export type numberingｰoptions = tagｰoptions & {
   signｰall?: boolean;
 };
 
-// Utility functions ////////////////////////////////////////////////////////
-// Common code across tag functions; some of this is generic though.       //
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Split text into lines, removing trailing white space and double blank lines
- *
- * @param text - the original text
- * @returns an array of lines without trailing whitespace
- */
-const textｰlines = (text: string): string[] =>
-  text
-    // split into lines
-    .split("\n")
-    // trim lines at end
-    .map((line) => line.replace(/\s*$/, ""))
-    // fold multiple spaces
-    .map((line) => line.replace(/(\S)\s+/g, "$1 "))
-    // remove double blank lines
-    .reduce<string[]>(
-      (
-        textｰlines: string[],
-        line: string,
-        index: number,
-        source: string[]
-      ): string[] =>
-        line || (index > 0 && source[index - 1]?.trim()) // useless ?. accessor, due to TS limitation
-          ? // if the line is not blank or if it is the first one after a blank one, we keep it
-            textｰlines.concat(line)
-          : // otherwise, we skip it
-            textｰlines,
-      []
-    );
-/**
- * Compute the minimum indentation level (in number of space characters) of a set of lines.
- * If lines start with non-blank characters, this is 0.
- * Otherwise, this is the minimum amount of spaces before any non-blank character.
- *
- * @param lines - the set of lines
- * @returns the minimum indentation
- */
-
-const minｰindentation = (lines: string[]): number =>
-  lines
-    // ignore blank lines
-    .filter((line) => line.trim())
-    // keep leading space…
-    .map((line) => line.match(/ */))
-    // …and count how many space characters there are
-    .map((spaces) => (spaces && spaces[0]?.length) ?? 0)
-    // then find the minimum indentation level
-    .reduce(
-      (min: number, indentation: number) =>
-        indentation < min ? indentation : min,
-      Infinity // start big to compute the minimum
-    );
-
 /**
  * Turn a `(string, ...value) => string` tag function into a function that can accept a
  * chainable tag function in lieu of its string parameter and return a chainable tag function.
@@ -652,28 +836,6 @@ const makeｰchainable = (tag: nativeｰtag): chainableｰtagｰfunction => {
   rename(chainable, tagｰname);
   return chainable;
 };
-
-// Tag functions ////////////////////////////////////////////////////////////
-// We define chainable tag functions below.                                //
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * The identity tag is not very useful, except to zip strings and values together.
- * This module uses it internally to stitch string literals and substitution expression.
- *
- * @returns a string that interleaves values into the strings array
- */
-export const identity: chainableｰtagｰfunction = makeｰchainable(
-  rename(function (strings: templateｰstrings, ...values: printable[]): string {
-    // make sure we have a value corresponding to each string in strings
-    values.push("");
-    // zip strings and values together
-    return strings.reduce(
-      (text: string, s: string, i: number) => `${text}${s}${values[i]}`,
-      ""
-    );
-  }, "identity")
-);
 
 /**
  * The `raw` tag is identical to [`String.raw`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw).

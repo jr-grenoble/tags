@@ -24,47 +24,51 @@
  */
 
 import { expect } from "chai";
-import type {
-  callableｰtagｰfunction,
-  printable,
+import {
+  makeｰtag,
   nativeｰtag,
+  printable,
+  tagｰoptions,
   templateｰstrings,
 } from "../libs/tags";
-import { makeｰcallable } from "../libs/tags";
 
 describe("tag types", () => {
   type tagｰoutput = {
     string: string;
     number: number;
+    options?: tagｰoptions;
   };
   // Return an object containing all strings joined by newlines and 42 plus the sum of its parameters
-  const simpleｰtag: nativeｰtag = function simpleｰtag(
+  const simpleｰnativeｰtag: nativeｰtag = function simpleｰnativeｰtag(
     strings: templateｰstrings,
     ...values: printable[]
   ): tagｰoutput {
     return {
       string: strings.join("\n"),
-      number: values.reduce((sum: number, n) => sum + (n as number), 42),
+      number: values.reduce<number>(
+        (sum: number, n) => sum + parseFloat(n.toString()),
+        42
+      ),
     };
   };
-  // callable  equivalent
-  const simpleｰcallableｰtag: callableｰtagｰfunction = makeｰcallable(simpleｰtag);
+  const simpleｰcallableｰtag = makeｰtag(function simpleｰcallableｰtag(
+    options?: tagｰoptions
+  ): nativeｰtag {
+    return (strings: templateｰstrings, ...values: printable[]): tagｰoutput => {
+      return { options, ...simpleｰnativeｰtag(strings, ...values) };
+    };
+  },
+  {});
 
   specify("tags are properly named", () => {
-    //////-------------------------/////////
-    expect(simpleｰtag.name).to.equal("simpleｰtag");
-    expect(simpleｰtag.name).not.to.have.property("callable");
+    //
+    expect(simpleｰnativeｰtag.name).to.equal("simpleｰnativeｰtag");
+    expect(simpleｰcallableｰtag.name).to.equal("simpleｰcallableｰtag");
   });
 
-  specify("callable tags are properly named", () => {
-    //////----------------------------------/////////
-    expect(simpleｰcallableｰtag.name).to.equal("simpleｰtag");
-    expect(simpleｰcallableｰtag).has.property("callable", true);
-  });
-
-  specify("callable tags return regular output", () => {
-    //////-------------------------------------/////////
-    expect(simpleｰtag`This should be ${10} + ${-10}`).to.deep.equal({
+  specify("tags return proper output", () => {
+    //
+    expect(simpleｰnativeｰtag`This should be ${10} + ${-10}`).to.deep.equal({
       string: "This should be \n + \n", // the trailing \n is due to joining an empty string after the last expression
       number: 42,
     });
@@ -72,11 +76,21 @@ describe("tag types", () => {
     expect(simpleｰcallableｰtag`This should be [${41 + 1}]`).to.deep.equal({
       string: "This should be [\n]", // here the string following the last expresson is non empty, hence no trailing \n
       number: 42 * 2,
+      options: {},
     });
     //
     expect(simpleｰcallableｰtag(`This should be ${43 - 1}`)).to.deep.equal({
       string: "This should be 42", // the template literal is evaluated to a string before being passed to the callable tag
       number: 42, // there are no values to reduce, hence it returns the initial value (42)
+      options: {},
+    });
+    //
+    expect(
+      simpleｰcallableｰtag({ whiteｰspace: /\t/g })`This should be [${41 + 1}]`
+    ).to.deep.equal({
+      string: "This should be [\n]", // here the string following the last expresson is non empty, hence no trailing \n
+      number: 42 * 2,
+      options: { whiteｰspace: /\t/g },
     });
   });
 });

@@ -2,9 +2,9 @@
 
 # Interface: nativeｰtag
 
-Tag functions prefix template literals and access their constituents before processing them.
+Native tag functions prefix template literals and access their constituents before processing them.
 >
-A (plain) tag function must conforms to this interface. It gets template literal components via
+A native tag function must conforms to this interface. It gets template literal components via
 a `templateｰstrings` array along with a series of 'printable' expressions. The `templateｰstrings`
 array iterates over the string literals that surround printable `${expressions}`. By default, these
 string literals are processed for escape characters such as \n for newlines, but the array is
@@ -64,7 +64,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:117](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L117)
+Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L113)
 
 ## Table of contents
 

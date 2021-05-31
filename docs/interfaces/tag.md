@@ -2,7 +2,90 @@
 
 # Interface: tag<T\>
 
-**`todo`** thoroughly document!!!
+**`example`**
+We extend native tag functions so that they can be chained and also so that you can call them on regular strings.
+We also allow these new tag functions to be parametrized via [`tagｰoptions`](../modules.md#tagｰoptions)
+>
+When you compose chaianable tags, the innermost (deepest) tag is applied first, followed by tags of lesser depth,
+until the outermost tag is called. For instance, if you log the following expression:
+
+```typescript
+ numbering({ prefix: "" })(paragraph(outdent))`
+        This is some text with π = ${Math.PI}.
+        This line has the same indentation as the previous one.
+            This line has deeper indentation.
+            This one too. There are 2 blank lines next.
+
+        This line has the initial indentation level.
+        And this is the last line.
+        `;
+```
+You get the following console output:
+```
+ ₁│This is some text with π = 3.141592653589793.
+ ₂│
+ ₃│This line has the same indentation as the previous one.
+ ₄│
+ ₅│    This line has deeper indentation.
+ ₆│
+ ₇│    This one too. There are 2 blank lines next.
+ ₈│
+ ₉│This line has the initial indentation level.
+₁₀│
+₁₁│And this is the last line.
+```
+Let's decompose this. The chainable tags are `numbering({ prefix: "" })(paragraph(outdent))`,
+with the deepest tag (at the end of the chain) being the `outdent` tag. Thus the `outdent` tag
+is the first to process the template literal.
+>
+This tag takes a template literal and removes as many spaces from the left of each line as there are in
+ the least indented line(this tag is useful to keep code properly indented). In the example above, `outdent`
+produces the following output:
+```
+This is some text with π = 3.141592653589793.
+This line has the same indentation as the previous one.
+    This line has deeper indentation.
+    This one too. There are 2 blank lines next.
+
+This line has the initial indentation level.
+And this is the last line.
+
+```
+Note that the last line of output is blank, as `outdent` only folds blank lines but doesn't remove trailing ones.
+>
+Once the `outdent` tag has finished its job (expanding expressions such `Math.PI` in the process), the next tag
+in line is the `paragraph` tag. This tag simply takes each line and inserts blank lines around it, then it folds
+blank lines and removes trailing blank lines. When passed the previous output, it yields:
+```
+This is some text with π = 3.141592653589793.
+
+This line has the same indentation as the previous one.
+
+    This line has deeper indentation.
+
+    This one too. There are 2 blank lines next.
+
+This line has the initial indentation level.
+
+And this is the last line.
+```
+You can see that each input line has become a single paragraph.
+>
+Finally, the shallowest tag is the `numbering` tag. This tag takes some options, in this case, we tell it
+to use an empty prefix before line numbers. Had we not done that, it would have produced the following output:
+```
+│ ₁│This is some text with π = 3.141592653589793.
+│ ₂│
+│ ₃│This line has the same indentation as the previous one.
+│ ₄│
+│ ₅│    This line has deeper indentation.
+│ ₆│
+│ ₇│    This one too.
+│ ₈│
+│ ₉│This line has the initial indentation level.
+│₁₀│
+│₁₁│And this is the last line.
+```
 
 ## Type parameters
 
@@ -28,7 +111,7 @@
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:198](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L198)
+Defined in: [Dev/projects/tags/libs/tags.ts:278](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L278)
 
 ▸ **tag**(`options?`: T): [*tag*](tag.md)<T\>
 
@@ -40,7 +123,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:198](https://github.com/jr-grenoble/
 
 **Returns:** [*tag*](tag.md)<T\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:199](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L199)
+Defined in: [Dev/projects/tags/libs/tags.ts:279](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L279)
 
 ▸ **tag**(`tag`: [*nativeｰtag*](native_tag.md)): [*nativeｰtag*](native_tag.md)
 
@@ -52,7 +135,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:199](https://github.com/jr-grenoble/
 
 **Returns:** [*nativeｰtag*](native_tag.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:200](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L200)
+Defined in: [Dev/projects/tags/libs/tags.ts:280](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L280)
 
 ▸ **tag**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
@@ -94,7 +177,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:117](https://github.com/jr-grenoble/tags/blob/6250c7b/libs/tags.ts#L117)
+Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L113)
 
 ## Table of contents
 
