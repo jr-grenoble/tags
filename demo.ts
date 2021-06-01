@@ -16,8 +16,6 @@ import {
   pretty,
   printable,
   raw,
-  rename,
-  serialize,
   tag,
   wrap,
 } from "./libs/tags";
@@ -140,45 +138,76 @@ test(
          And this is the last line.
          `
 );
+
 test(
-  identity,
-  serialize`➀ Trying json on ${numberingｰoptions} and on ${[
-    1, 2, 3,
-  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+  identity({ indentｰvalues: false }),
+  identity({ indentｰvalues: true })`
+            This is line 1   
+            This is line 2\n    
+            and 3
+            This is an ${JSON.stringify(
+              {
+                expression: true,
+                number: 3,
+                object: {
+                  a: "a",
+                  b: { c: "c", d: {} },
+                },
+                date: undefined,
+              },
+              null,
+              4
+            )} plus   
+            some trailing text.`
 );
 
 test(
   identity,
-  serialize(
-    `➁ Trying json on ${numberingｰoptions} and on ${[
-      1, 2, 3,
-    ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
-  )
+  identity(identity, identity)`Here's an array${JSON.stringify(
+    Array(10).fill(Math.random()),
+    null,
+    4
+  )}`
 );
+// test(
+//   identity,
+//   serialize`➀ Trying json on ${numberingｰoptions} and on ${[
+//     1, 2, 3,
+//   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+// );
 
-test(
-  identity,
-  serialize({
-    indentation: 8,
-    filter: ["c", "d", "e"],
-  })`➂ Trying json on ${numberingｰoptions} and on ${[
-    1, 2, 3,
-  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
-);
+// test(
+//   identity,
+//   serialize(
+//     `➁ Trying json on ${numberingｰoptions} and on ${[
+//       1, 2, 3,
+//     ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+//   )
+// );
 
-test(
-  identity,
-  serialize(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
-    1, 2, 3,
-  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
-);
+// test(
+//   identity,
+//   serialize({
+//     indentation: 8,
+//     filter: ["c", "d", "e"],
+//   })`➂ Trying json on ${numberingｰoptions} and on ${[
+//     1, 2, 3,
+//   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+// );
 
-test(
-  rename(identity, "cowboy"),
-  serialize({
-    indentation: 8,
-    filter: ["c", "d", "e"],
-  })(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
-    1, 2, 3,
-  ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
-);
+// test(
+//   identity,
+//   serialize(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
+//     1, 2, 3,
+//   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+// );
+
+// test(
+//   rename(identity, "cowboy"),
+//   serialize({
+//     indentation: 8,
+//     filter: ["c", "d", "e"],
+//   })(indent(5))`➂ Trying json on ${numberingｰoptions} and on ${[
+//     1, 2, 3,
+//   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
+// );

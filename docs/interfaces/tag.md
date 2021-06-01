@@ -87,6 +87,12 @@ to use an empty prefix before line numbers. Had we not done that, it would have 
 │₁₁│And this is the last line.
 ```
 
+Note that we provide 2 syntaxes for tag composition:
+1. the one described above, e.g. `numbering(paragraph(outdent))`
+2. a flattened one, e.g. the equivalent of the above is ` numbering(paragraph, outdent)`
+In both cases, tags apply from right to left, i.e. in the example above, `outdent` applies first,
+then `paragraph` applies to the result of `outdent`, and finally, `numbering` applies to the resulting string.
+
 ## Type parameters
 
 | Name | Type |
@@ -111,7 +117,7 @@ to use an empty prefix before line numbers. Had we not done that, it would have 
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:278](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L278)
+Defined in: [Dev/projects/tags/libs/tags.ts:285](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L285)
 
 ▸ **tag**(`options?`: T): [*tag*](tag.md)<T\>
 
@@ -123,19 +129,20 @@ Defined in: [Dev/projects/tags/libs/tags.ts:278](https://github.com/jr-grenoble/
 
 **Returns:** [*tag*](tag.md)<T\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:279](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L279)
+Defined in: [Dev/projects/tags/libs/tags.ts:286](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L286)
 
-▸ **tag**(`tag`: [*nativeｰtag*](native_tag.md)): [*nativeｰtag*](native_tag.md)
+▸ **tag**(`tag`: [*nativeｰtag*](native_tag.md), ...`otherｰtags`: [*nativeｰtag*](native_tag.md)[]): [*nativeｰtag*](native_tag.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `tag` | [*nativeｰtag*](native_tag.md) |
+| `...otherｰtags` | [*nativeｰtag*](native_tag.md)[] |
 
 **Returns:** [*nativeｰtag*](native_tag.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:280](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L280)
+Defined in: [Dev/projects/tags/libs/tags.ts:287](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L287)
 
 ▸ **tag**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
 
@@ -177,7 +184,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/dfb84ad/libs/tags.ts#L113)
+Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L113)
 
 ## Table of contents
 

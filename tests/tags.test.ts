@@ -85,12 +85,10 @@ describe("tag types", () => {
       options: {},
     });
     //
-    expect(
-      simpleｰcallableｰtag({ whiteｰspace: /\t/g })`This should be [${41 + 1}]`
-    ).to.deep.equal({
+    expect(simpleｰcallableｰtag({})`This should be [${41 + 1}]`).to.deep.equal({
       string: "This should be [\n]", // here the string following the last expresson is non empty, hence no trailing \n
       number: 42 * 2,
-      options: { whiteｰspace: /\t/g },
+      options: {},
     });
   });
 });

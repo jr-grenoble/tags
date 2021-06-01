@@ -164,14 +164,16 @@ export interface nativeｰtag extends Function {
  *    // … other defaults
  * }
  * ```
+ * Note that options neither include the possibility to define white space (this is `/\s/`)
+ * nor the ability to redefine line terminators (this is `\n`), mainly because standard typescript functions
+ * such as String.trim use these definitions.
  */
 export type tagｰoptions =
   | boolean
   | number
   | {
-      readonly whiteｰspace?: RegExp /** what is to be considered white space, default is /\s/g */;
       readonly lineｰjoiner?: string /** what to put between joined lines, default is a single space " " */;
-      readonly foldｰblankｰlinesʔ̣?: boolean /** whether to fold blank line sequences into a single one, default is true */;
+      readonly foldｰblankｰlines?: boolean /** whether to fold blank line sequences into a single one, default is true */;
       readonly trimｰtrailingｰspace?: boolean /** whether to remove trailing space, default is true */;
     };
 
@@ -181,9 +183,8 @@ export type tagｰoptions =
  * for how to extend options and defaults.
  */
 export const defaultｰtagｰoptions: tagｰoptions = {
-  whiteｰspace: /\s/g /** replace by `/ /g` to only handle real space */,
   lineｰjoiner: " " /** replace by ``""`` to remove all space between lines */,
-  foldｰblankｰlinesʔ̣: true /** replace by `false` to preserve blank lines */,
+  foldｰblankｰlines: true /** replace by `false` to preserve blank lines */,
   trimｰtrailingｰspace:
     true /** replace by `false` to preserve trailing space */,
 } as const;
@@ -274,11 +275,20 @@ export const defaultｰtagｰoptions: tagｰoptions = {
  * │₁₀│
  * │₁₁│And this is the last line.
  * ```
+ *
+ * Note that we provide 2 syntaxes for tag composition:
+ * 1. the one described above, e.g. `numbering(paragraph(outdent))`
+ * 2. a flattened one, e.g. the equivalent of the above is ` numbering(paragraph, outdent)`
+ * In both cases, tags apply from right to left, i.e. in the example above, `outdent` applies first,
+ * then `paragraph` applies to the result of `outdent`, and finally, `numbering` applies to the resulting string.
  */
 export interface tag<T extends tagｰoptions> extends nativeｰtag {
   (string: string): any /** apply the base tag to a string */;
   (options?: T): tag<T> /** create a new tag function out of options */;
-  (tag: nativeｰtag): nativeｰtag /** compose tags */;
+  (
+    tag: nativeｰtag,
+    ...otherｰtags: nativeｰtag[]
+  ): nativeｰtag /** compose tags */;
 }
 
 /**
@@ -299,6 +309,13 @@ export const rename = <type extends { name: string }>(
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * @returns whether options indicate to trim trailing space
+ */
+const trimｰtrailingｰspace = (options: tagｰoptions) =>
+  typeof options === "object" &&
+  (options?.trimｰtrailingｰspace ?? defaultｰtagｰoptions.trimｰtrailingｰspace);
+
+/**
  * Turn an array of readonly strings into a `templateｰstrings` array
  * by adding a `raw` property to the initial array and assigning it
  * the very same array of strings.
@@ -310,6 +327,32 @@ const makeｰraw = (
   <readonly string[] & { raw: readonly string[] }>(
     Object.assign(strings, { raw: strings })
   );
+
+/**
+ * Compose (chain) tags together, right to left
+ * @returns a tag function equivalent to calling the chain of tags
+ *
+ * @example
+ * ```typescript
+ * composeｰtags(t1, t2, t3, t4)`some strings and ${expressions}`
+ * // is equivalent to:
+ * t1(t2(t3(t4)))`some strings and ${expressions}`
+ * ```
+ */
+const composeｰtags = (tags: tag<tagｰoptions>[]) => {
+  const numｰtags = tags.findIndex((tag) => typeof tag !== "function");
+  return (
+    numｰtags < 0 ? tags : tags.slice(0, numｰtags - 1)
+  ).reduceRight<nativeｰtag>(
+    (compositeｰtag, tag) =>
+      rename(
+        (s: templateｰstrings, ...v: printable[]): string =>
+          tag`${compositeｰtag(s, ...v)}`,
+        `${tag.name}(${compositeｰtag.name})`
+      ),
+    identity
+  );
+};
 
 /**
  * @todo thoroughly document!!!
@@ -324,21 +367,32 @@ export const makeｰtag = <T extends tagｰoptions>(
 ): tag<T> => {
   const tagｰname = tag.name || "anonymousｰtag";
 
-  const stag = (...args: any[]): any => {
+  function stag(...args: any[]): any {
     // ➊ no arguments => return native tag resulting from default options
     if (args.length === 0) return tag(defaults);
 
     // ➋ first argument is a string => apply the tag to that string
     if (typeof args[0] === "string") return tag(defaults)(makeｰraw([args[0]]));
 
-    // ➌ first argument is a function => compose it with the tag
-    if (typeof args[0] === "function")
+    // ➌ first argument is a function => compose it with the tags
+    if (typeof args[0] === "function") {
+      const compositeｰtag = composeｰtags(args);
       return rename(
         (s: templateｰstrings, ...v: printable[]): string =>
-          tag(defaults)`${(args[0] as nativeｰtag)(s, ...v)}`,
-        `${tagｰname}(${args[0].name})`
+          tag(defaults)`${compositeｰtag(s, ...v)}`,
+        `${tagｰname}(${compositeｰtag.name})`
       );
 
+      // Old code handled only one tag:
+      //
+      // const composeｰtag = args.shift() as nativeｰtag;
+      //
+      // return rename(
+      //   (s: templateｰstrings, ...v: printable[]): string =>
+      //     tag(defaults)`${composeｰtag(s, ...v)}`,
+      //   `${tagｰname}(${composeｰtag.name})`
+      // );
+    }
     // ➍ first argument is a templateｰstrings array => apply tag to template literal
     if (
       Array.isArray(args[0]) &&
@@ -352,36 +406,15 @@ export const makeｰtag = <T extends tagｰoptions>(
     // ➎ the remaining case is a call to the parametrizable version
     // Note that we create a new function each time it is called with explicit parameters…
     // When a set of options is used often, the library user should alias the tag.
-    return makeｰtag(
+    return makeｰtag<tagｰoptions>(
       rename(() => tag(args[0]), tagｰname),
       {} // no defaults for this new tag
     );
-  };
+  }
   return rename(stag as tag<T>, tagｰname);
 };
 
 const ထ = Infinity;
-// type dimensions = {
-//   minｰindentation: number;
-//   maxｰlineｰlength: number;
-// };
-const dimensions = (lines: string[], options: tagｰoptions) => {
-  const dimensions = {
-    maxｰlineｰlength: 0,
-    minｰlineｰlength: +ထ,
-    maxｰindentation: 0,
-    minｰindentation: +ထ,
-    maxｰtrailingｰspace: 0,
-    minｰtrailingｰspace: +ထ,
-  };
-
-  // whiteｰspace?: RegExp /** what is to be considered white space, default is /\s/g */;
-  // lineｰjoiner?: string /**  what to put between joined lines, default is a single space " " */;
-  // foldｰblankｰlinesʔ̣?: boolean /** whether to fold blank line sequences into a single one, default is true */;
-  // trimｰtrailingｰspace?: boolean /** whet
-
-  return dimensions;
-};
 
 /**
  * Split text into lines, removing trailing white space and double blank lines
@@ -420,21 +453,26 @@ const textｰlines = (text: string): string[] =>
  * @param lines - the set of lines
  * @returns the minimum indentation
  */
-
-const minｰindentation = (lines: string[]): number =>
-  lines
-    // ignore blank lines
-    .filter((line) => line.trim())
-    // keep leading space…
-    .map((line) => line.match(/ */))
-    // …and count how many space characters there are
-    .map((spaces) => (spaces && spaces[0]?.length) ?? 0)
-    // then find the minimum indentation level
-    .reduce(
-      (min: number, indentation: number) =>
-        indentation < min ? indentation : min,
-      +ထ // start big to compute the minimum
-    );
+const minｰindentation = (
+  lines: string[],
+  options: tagｰoptions = defaultｰtagｰoptions
+): number => {
+  return (
+    (
+      trimｰtrailingｰspace(options) // ignore blank lines when trailing space must be trimmed
+        ? lines.filter((line) => line.trim() !== "")
+        : lines
+    )
+      // count leading space…
+      .map((line) => line.search(/\S|$/))
+      // …then find the minimum indentation level
+      .reduce(
+        (min: number, indentation: number) =>
+          indentation < min ? indentation : min,
+        +ထ // start big to compute the minimum
+      )
+  );
+};
 
 /**
  * @todo document! The idea is to split template strings when there's a newline
@@ -447,29 +485,19 @@ const minｰindentation = (lines: string[]): number =>
 const normalizeｰstringsｰandｰvalues = (
   strings: templateｰstrings,
   values: printable[]
-): [string[], (printable | undefined)[]] => {
-  return strings.reduce<[string[], (printable | undefined)[]]>(
-    ([newｰstrings, newｰvalues], s, index) => {
-      const lines = s.split("\n");
-      const len = lines.length;
-      if (len <= 1)
-        return [
-          [...newｰstrings, s],
-          [...newｰvalues, values[index]],
-        ];
-      if (len >= 2) newｰvalues = newｰvalues.concat(Array(len - 2).fill(""));
-      return [
-        [
-          ...newｰstrings,
-          ...lines
-            .filter((_, index) => index !== len - 1)
-            .map((line) => line + "\n"),
-        ],
-        [...newｰvalues, values[index]],
-      ];
-    },
-    [[], []]
-  );
+): [string, printable][] => {
+  const pairs: [string, printable][] = [];
+  strings.forEach((string, index) => {
+    const lines = string.split("\n");
+    const len = lines.length;
+    if (len <= 1) {
+      pairs.push([string, values[index]!]);
+    } else {
+      for (let i = 0; i < len - 1; ++i) pairs.push([lines[i] + "\n", ""]);
+      pairs.push([lines[len - 1]!, values[index]!]);
+    }
+  });
+  return pairs;
 };
 
 // Tag functions ////////////////////////////////////////////////////////////
@@ -486,32 +514,53 @@ export const defaultｰidentityｰoptions: identityｰoptions = {
     true /** replace by false, if you want `identity` to ignore indentation */,
 };
 
-export const identity = makeｰtag<identityｰoptions>(
-  function identity({ indentｰvalues }: identityｰoptions = {}): nativeｰtag {
-    return function (
-      strings: templateｰstrings,
-      ...values: printable[]
-    ): string {
-      if (strings.length > values.length) values.push(""); // make sure |strings| === |values|
-      if (!indentｰvalues)
-        return strings.reduce<string>(
-          (text, s, i) => `${text}${s}${values[i]}`,
-          ""
-        );
-      // normalize strings by splitting them into lines delimited by \n
-      // [strings, values] = normalize(strings, values);
-      const [str, val] = normalizeｰstringsｰandｰvalues(strings, values);
-      // now map values to
-
-      //         const indentation = minｰindentation(lines);
-      //   // remove that minimum indentation from all lines
-      //   return lines.map((line) => line.slice(indentation)).join("\n");
-
-      return "not implemented";
-    };
-  },
-  { indentｰvalues: true }
-);
+export const identity = makeｰtag<identityｰoptions>(function identity(
+  options: identityｰoptions = {}
+): nativeｰtag {
+  return function (strings: templateｰstrings, ...values: printable[]): string {
+    if (strings.length > values.length) values.push(""); // make sure |strings| === |values|
+    if (!options.indentｰvalues)
+      return strings.reduce<string>(
+        (text, string, index) => `${text}${string}${values[index]}`,
+        ""
+      );
+    // we want to indent values in line with associated strings
+    else
+      return (
+        // normalize strings by splitting them into lines (when hitting a \n character),
+        // each associated with a value (we insert empty string values when we hit a \n)
+        normalizeｰstringsｰandｰvalues(strings, values)
+          // then split each string representation of values into individual value lines
+          .map<[string, string[]]>(([string, value]) => [
+            string as string,
+            value?.toString()?.split("\n") ?? [""],
+          ])
+          // then add indentation of initial string to each subsequent value line
+          .map<[string, string]>(([string, valueｰlines]) => {
+            // compute indentation of first line
+            const n = string.search(/\S|$/);
+            const indentation = " ".repeat(n);
+            return [
+              string,
+              [
+                // do not touch first value line
+                valueｰlines[0],
+                // add indentation to subsequent value lines
+                ...valueｰlines
+                  .slice(1)
+                  .map<string>((line) => indentation + line),
+              ].join("\n"),
+            ];
+          })
+          // then zip strings and values together to produce final text
+          .reduce<string>(
+            (text, [string, value]) => `${text}${string}${value}`,
+            ""
+          )
+      );
+  };
+},
+defaultｰidentityｰoptions);
 
 // Legacy code ////////////////////////////////////////////////////////
 // Common code across tag functions; some of this is generic though.       //
