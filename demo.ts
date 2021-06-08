@@ -211,3 +211,66 @@ test(
 //     1, 2, 3,
 //   ]} plus on ${ab} and ${{ c: 3, d: { e: 4, f: [5, 6] } } as printable}`
 // );
+
+// core ю object
+type юｰꮊ = {
+  stack: {
+    readonly method: any;
+    readonly options: any;
+  }[];
+  readonly literals: { cooked: string; raw: string }[];
+  readonly expressions: any[];
+};
+const юｰꮊ: юｰꮊ = { stack: [], literals: [], expressions: [] };
+
+interface Ю extends Function {
+  t: Ю;
+  (...args: any[]): Ю;
+}
+class Ю extends Function {
+  // each Ю object has a unique id
+  private static uuid = 0;
+  private self: Ю;
+  private id: string;
+  constructor() {
+    super();
+    Ю.uuid += 1;
+    this.id = ` - ${Ю.uuid} - `;
+    this.self = new Proxy(this, {
+      apply: (target, _ðɪs, args) => {
+        console.log(`${target.id} proxy call(${args})`);
+        return this.self;
+      },
+      get: (target, property, _proxy) => {
+        console.log(`${target.id} proxy access->${String(property)}`);
+        return this.self;
+      },
+    });
+    return this.self;
+  }
+}
+
+const expression = {
+  array: [] as number[],
+  get next(): number[] {
+    this.array.push(this.array.length);
+    return this.array;
+  },
+  toString(): string {
+    return JSON.stringify(this.array);
+  },
+};
+const ю = new Ю();
+
+const tests = [
+  ю`text ${expression.next}`,
+  ю(1)`text ${expression.next}`,
+  ю.t`text ${expression.next}`,
+  ю(3).t`text ${expression.next}`,
+  ю.t(4)`text ${expression.next}`,
+  ю(5).t(6)`text ${expression.next}`,
+  ю.t.t`text ${expression.next}`,
+  ю.t`abc`(8),
+  ю.t.t`text ${ю.t(9)`abc`}`,
+];
+void tests;

@@ -64,7 +64,7 @@ ___
 
 Overrides: TemplateStringsArray.raw
 
-Defined in: [Dev/projects/tags/libs/tags.ts:95](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L95)
+Defined in: [Dev/projects/tags/libs/tags.ts:102](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L102)
 
 ## Methods
 

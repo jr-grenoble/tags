@@ -117,7 +117,7 @@ then `paragraph` applies to the result of `outdent`, and finally, `numbering` ap
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:285](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L285)
+Defined in: [Dev/projects/tags/libs/tags.ts:312](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L312)
 
 ▸ **tag**(`options?`: T): [*tag*](tag.md)<T\>
 
@@ -129,7 +129,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:285](https://github.com/jr-grenoble/
 
 **Returns:** [*tag*](tag.md)<T\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:286](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L286)
+Defined in: [Dev/projects/tags/libs/tags.ts:313](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L313)
 
 ▸ **tag**(`tag`: [*nativeｰtag*](native_tag.md), ...`otherｰtags`: [*nativeｰtag*](native_tag.md)[]): [*nativeｰtag*](native_tag.md)
 
@@ -142,9 +142,9 @@ Defined in: [Dev/projects/tags/libs/tags.ts:286](https://github.com/jr-grenoble/
 
 **Returns:** [*nativeｰtag*](native_tag.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:287](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L287)
+Defined in: [Dev/projects/tags/libs/tags.ts:314](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L314)
 
-▸ **tag**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
+▸ **tag**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
 The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
 call:
@@ -179,12 +179,11 @@ for more information.
 
 | Name | Type |
 | :------ | :------ |
-| `strings` | [*templateｰstrings*](template_strings.md) |
-| `...values` | [*printable*](printable.md)[] |
+| `...args` | [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs) |
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L113)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
 
 ## Table of contents
 

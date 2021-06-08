@@ -22,9 +22,9 @@
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:569](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L569)
+Defined in: [Dev/projects/tags/libs/tags.ts:689](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L689)
 
-▸ **callableｰtagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
+▸ **callableｰtagｰfunction**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
 The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
 call:
@@ -59,12 +59,11 @@ for more information.
 
 | Name | Type |
 | :------ | :------ |
-| `strings` | [*templateｰstrings*](template_strings.md) |
-| `...values` | [*printable*](printable.md)[] |
+| `...args` | [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs) |
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L113)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
 
 ## Table of contents
 
@@ -101,7 +100,7 @@ ___
 
 • **callable**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:571](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L571)
+Defined in: [Dev/projects/tags/libs/tags.ts:691](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L691)
 
 ___
 

@@ -20,9 +20,9 @@ For reference convenience, we list most of our dependencies here:
 
 Note: this file is hardlinked into the root project directory.
 
-# Tags
+# Ю tags
 
-**Tags** are a self contained [Typescript](https://www.typescriptlang.org/) library that provides chainable, parametrizable tags for [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) as well as other text processing utilities.
+**Ю tags** are a self contained [Typescript](https://www.typescriptlang.org/) library that provides chainable, parametrizable tags for [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) as well as other text processing utilities.
 
 This is an opinionated library. It provides reasonable (i.e. fitting my taste) options only.
 
@@ -31,15 +31,119 @@ This is an opinionated library. It provides reasonable (i.e. fitting my taste) o
 The **Tags** library consists of a single typescript module conforming to modern module conventions. You can use the library via `import` statements such as:
 
 ```typescript
-import * as tags from "./libs/tags"; // tags are usable via their names qualified with "tags"
-console.log(tags.json`array ${[1, 2, 3]}`);
-
+import ю from "./libs/tags"; // only import the ю tag
 import type { printable } from "./libs/tags"; // imported types leave no trace in the executable code
-import { json as log } from "./libs/tags"; // rename imported tag
-console.log(
-  log`object ${{ a: 1, b: 2, c: { c1: 3.1, c2: 3.2 } } as printable}`
-);
+
+const json = ю.serialize; // rename imported tag
+console.log(json`object ${{ a: 1, b: 2, c: { c1: 3.1, c2: 3.2 } }}`);
 ```
+
+By default, all tag functions must be chained to the default module export, ю. This is Unicode character \u044e, Cyrillic small letter yu, whose shape is reminiscent of a tag. You can rename it `tag` in the import clause if you want, this will not conflict with other names in the library. I personally use a shortcut: `|-o` generates the `ю` character on my machine.
+
+For a complete view of the libray, see the [list tags](#list-of-tags) and [list of options](#list-of-options).
+
+Chained tags operate much like the [chai](https://www.chaijs.com/api/bdd) assertion language, except that the various tags apply right to left to the template literal,i.e. the tag closest to the template literal applies first. The typical use is to prepend a template literal with a chain of tags, each tags being potentially parametrized. For instance, the expression:
+
+```typescript
+console.log(ю
+  .number
+  .trimｰblankｰlines
+  .wrap(30)
+  .paragraphsｰfromｰlines
+  .outdent
+  .serialize`
+    This is the first non blank line, indented by 4 spaces, and 105 characters long, including the final dot.
+    The second non blank line is shorter at 67 characters with the dot.
+        The third line is indented a further 4 spaces, for a total of 8 and is 124 characters long including these extra spaces.
+        The next one includes a numeric expression: ${
+          1 / Math.PI
+        } that is followed by text.
+
+        The fifth one includes an object: ${
+          // This comment will disappear
+          {
+            a: 1, b:2,
+            c: [3.1, 3.2, 3.3],
+            d: {
+              e: 4.1,
+              f: { g: 4.21 }
+            }
+          }
+        } that we want to serialize.
+    Finally, the last line reverts to an indentation of only 4 spaces and ends with a newline.
+  `
+```
+
+will produce the following output:
+
+<table>
+  <colgroup>
+    <col span="1" style="width:30em">
+    <col span="1" style="width:15em"/>
+  </colgroup>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top"><code>
+      <pre>
+        │ ₁│This is the first non blank
+        │ ₂│line, indented by 4 spaces,
+        │ ₃│and 105 characters long,
+        │ ₄│including the final dot.
+        │ ₅│
+        │ ₆│The second non blank line is
+        │ ₇│shorter at 67 characters with
+        │ ₈│the dot.
+        │ ₉│
+        │₁₀│    The third line is indented
+        │₁₁│    a further 4 spaces, for a
+        │₁₂│    total of 8 and is 124
+        │₁₃│    characters long including
+        │₁₄│    these extra spaces.
+        │₁₅│
+        │₁₆│    The next one includes a
+        │₁₇│    numeric expression: 
+        │₁₈│    0.3183098861837907
+        │₁₉│    that is followed by text.
+        │₂₀│
+        │₂₁│    The fifth one includes an
+        │₂₂│    object: {
+        │₂₃│      "a": 1,
+        │₂₄│      "b": 2,
+        │₂₅│      "c": [
+        │₂₆│        3.2,
+        │₂₇│        3.1,
+        │₂₈│        3.3
+        │₂₉│      ],
+        │₃₀│      "d": {
+        │₃₁│        "e": 4.1,
+        │₃₂│        "f": {
+        │₃₃│          "g": 4.21
+        │₃₄│        }
+        │₃₅│      }
+        │₃₆│    } that we want to
+        │₃₇│    serialize.
+        │₃₈│
+        │₃₉│Finally, the last line reverts
+        │₄₀│to an indentation of only 4
+        │₄₁│spaces and ends with a
+        │₄₂│newline.
+      </pre></code>
+      </td>
+      <td style="vertical-align: top">
+      <p><br>You can see that the whole text is numbered, due to the <code>number</code> tag.</p>
+      <p>The first and last blank lines have disappeared,
+      and the extra white lines before the fifth line have disappeared
+      as a result of using the <code>trimｰblankｰlines</code> option.</p>
+      <p>The text folds at 30 characters on each line, due to the <code>wrap(30)</code> tag</p>
+      <p>Each line in the initial text was turned into a paragraph separated from the next by a blank line,
+      due to the <code>paragraphsｰfromｰlines</code> option</p>
+      <p>The initial 4-space indentation has also been eliminated via the <code>outdent</code> tag</p>
+      <p>Finally, the object expression that would normally turn as [object Object] has ben serialized,
+      obviously thanks to the <code>serialize</code> tag</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 # Project structure
 
@@ -90,3 +194,67 @@ const textｰlines = input.split("\n"); // an array, hence plural for lines
 ```
 
 Tag functions (and functions) are named with a verb, possibly qualified.
+
+# Reference
+
+## List of tags
+
+#### `outdent`
+
+allows for removing minimal indentation from text
+
+## List of types
+
+#### `printable`
+
+can be
+
+#### `templateｰstrings`
+
+is a template string array, i.e. an array of readonly strings with a `raw` iterator allowing to access
+
+## List of utilities
+
+#### `minｰindentation`
+
+returns the minimal indentation for text
+
+## List of options
+
+#### `all`
+
+apply subsequent tags both to literals and to expressions.
+
+# Todo list
+
+- create input tag allowing to fetch data instead of printing it, similar to C++ cin; syntax would be `` ю.fetch({name,address})`name: ${name}, address: ${address}` ``; this example would require `name` and `address` to be in context.
+- look at [XRegExp](https://xregexp.com/) and how it uses raw strings.
+- look at [rauschma](https://exploringjs.com/es6/ch_template-literals.html)
+- investigate postprocessing, i.e. patterns such as `` ю.tag3.tag2.tag1`template literal`.tag4.tag5.ꮊ ``; the post processing tags operate on strings though, unless you have a terminator such as ꮊ (cherokee me) that would allow for completion.
+- use default parameters for line folding, blank line management.
+- provide uncomment tag to remove C++-like comments from template-strings
+- what about half tags that would only affect template ｰ strings or values ????
+- provide a flush left and right mechanism (by default, flush is left) allowing justification left and right
+- provide options in outdent so that ${expressions} get processed (or not)
+- provide fixed decimal, engineering and scientific notation tag for ${expressions}, as well as more general number formatting
+- provide a format generator allowing to input objects/numbers in the template literal and format each individually
+- separate such formatting (numbers, bold…) into other module (optional), only keep spacing in this one.
+- implement an html escaping tag that eats whitespace, see [rauschma](https://exploringjs.com/es6/ch_template-literals.html#sec_html-tag-function-implementation).
+
+# Design
+
+## Random notes
+
+We use [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) and of course [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) to implement most tags. As the library is quite large,
+we use the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) to signal misspelling, cf. [chai's proxy](https://github.com/chaijs/chai/blob/main/lib/chai/utils/proxify.js). We [add chainable](https://github.com/chaijs/chai/blob/main/lib/chai/utils/addChainableMethod.js) tags dynamically to the ю object,
+
+## Tag class
+
+All elements of a tag chain (tag objects) are derived from the tag class. All these elements support chaining and direct call.
+When a tag chain `` ю(...paramsｰ0).tagｰ1(...paramsｰ1).tagｰ2.…tagｰn(...paramsｰn)`litｰ1 ${epressionｰ1} litｰ2 … litｰn ${expressionｰn} litｰend`  `` is processed, tag processing is pushed on a stack until the tag chain reaches the template literals. These are available in the form of a `[ templateｰstrings, ...printable[] ]` t-uple. The way this works is the following:
+
+1. all tag _objects_ are derived from functions and thus are callable.
+
+Then, the tag object pops processing from the stack and executes it on the t-uple, modifying it at each step, until processing is exhausted. At this stage, the t-uple is assembled into a result, usually a string.
+
+## Options

@@ -73,7 +73,11 @@
 
 /*
  * ✅ @todo
- * • use default parameters for space detection, line folding, blank line management.
+ * • use default parameters for line folding, blank line management.
+ *
+ * • provide uncomment tag to remove comments from template-strings
+ *
+ * • what about half tags that would only affect templateｰstrings or values ????
  *
  * • provide a flush left and right mechanism (by default, flush is left) allowing justification left and right
  *
@@ -81,6 +85,9 @@
  *
  * • provide fixed decimal, engineering and scientific notation tag for ${expressions}, as well as more general number formatting
  *
+ * • provide a format generator allowing to input objects/numbers in the template literal and format each individually
+ *
+ * • separate such formatting (numbers, bold…) into other module (optional), only keep spacing in this one.
  */
 
 // Type definitions /////////////////////////////////////////////////////////
@@ -94,6 +101,7 @@
 export interface templateｰstrings extends TemplateStringsArray {
   raw: readonly string[] /** We redefine the raw property here, mainly for readability */;
 }
+// type templateｰstrings = readonly string[] & { raw: readonly string[] }; // does not work
 /**
  * Tag functions must be passed printable expressions for substitution
  */
@@ -101,6 +109,10 @@ export interface printable {
   toString(): string;
 }
 
+/**
+ * The native tag function signature is based on this argument tuple.
+ * */
+export type nativeｰtagｰargs = [templateｰstrings, ...printable[]];
 /**
  * Native tag functions prefix template literals and access their constituents before processing them.
  * >
@@ -140,9 +152,17 @@ export interface nativeｰtag extends Function {
    * @see [MDN template literals]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals}
    * for more information.
    */
-  (strings: templateｰstrings, ...values: printable[]): any;
+  (...args: nativeｰtagｰargs): any; //equivalent to : (templateｰstrings, ...printable[])
 }
 
+/**
+ * In some cases, we want a tag function to partially apply to template literals and expressions,
+ * but to keep the two sets separate, so that further processing is possible. For instance, imagine
+ * there's a `bold` tag that turns text into bold and a `quote` tag that puts text within quotes,
+ * and you want to apply both of these tags to expressions; you'd write something like:
+ * ```bold(({apply: tagｰscope.onlyｰexpressions}))(quote({apply: tagｰscope.onlyｰexpressions}))`some text with ${expression}` ```
+ * in order to achieve your goal.
+ */
 /**
  * Tag options combine structured tag settings with boolean and number simple types.
  * The string type is not included in these simple types because:
@@ -150,7 +170,7 @@ export interface nativeｰtag extends Function {
  * - we want tags to operate on strings the same way they do on template literals.
  *
  * When a tag requires additional options, it defines a type that extends `tagｰoptions`,
- * and it creates a new default option constant, e.g. as:
+ * and it exports a new default option constant, e.g. as:
  *
  * ```typescript
  * type numberingｰoptions = tagｰoptions & {
@@ -168,25 +188,32 @@ export interface nativeｰtag extends Function {
  * nor the ability to redefine line terminators (this is `\n`), mainly because standard typescript functions
  * such as String.trim use these definitions.
  */
+export enum tagｰscope {
+  none,
+  onlyｰliterals,
+  onlyｰexpressions,
+  all,
+}
 export type tagｰoptions =
   | boolean
   | number
   | {
-      readonly lineｰjoiner?: string /** what to put between joined lines, default is a single space " " */;
       readonly foldｰblankｰlines?: boolean /** whether to fold blank line sequences into a single one, default is true */;
-      readonly trimｰtrailingｰspace?: boolean /** whether to remove trailing space, default is true */;
+      readonly trimｰendｰspace?: boolean /** whether to remove trailing space, default is true */;
+      readonly apply?: tagｰscope /** what to apply the tag to, default is all */;
     };
 
 /**
  * Default tag settings, used to initialize tag options in tag functions
  * See the {@linkcode tagｰoptions} interface for definitions as well as
  * for how to extend options and defaults.
+ * The `defaultｰtag--options` are `const`, because they are only used
+ * by spreading them into more specific options
  */
 export const defaultｰtagｰoptions: tagｰoptions = {
-  lineｰjoiner: " " /** replace by ``""`` to remove all space between lines */,
-  foldｰblankｰlines: true /** replace by `false` to preserve blank lines */,
-  trimｰtrailingｰspace:
-    true /** replace by `false` to preserve trailing space */,
+  foldｰblankｰlines: true /** use `false` to preserve blank lines */,
+  trimｰendｰspace: true /** use `false` to preserve trailing space */,
+  apply: tagｰscope.all /** use more specific scope to restrict application */,
 } as const;
 
 /**
@@ -311,9 +338,9 @@ export const rename = <type extends { name: string }>(
 /**
  * @returns whether options indicate to trim trailing space
  */
-const trimｰtrailingｰspace = (options: tagｰoptions) =>
+const trimｰendｰspace = (options: tagｰoptions) =>
   typeof options === "object" &&
-  (options?.trimｰtrailingｰspace ?? defaultｰtagｰoptions.trimｰtrailingｰspace);
+  (options?.trimｰendｰspace ?? defaultｰtagｰoptions.trimｰendｰspace);
 
 /**
  * Turn an array of readonly strings into a `templateｰstrings` array
@@ -367,7 +394,9 @@ export const makeｰtag = <T extends tagｰoptions>(
 ): tag<T> => {
   const tagｰname = tag.name || "anonymousｰtag";
 
-  function stag(...args: any[]): any {
+  const stag = function thisｰisｰtheｰoverloadedｰtagｰimplementation(
+    ...args: any[]
+  ): any {
     // ➊ no arguments => return native tag resulting from default options
     if (args.length === 0) return tag(defaults);
 
@@ -382,16 +411,6 @@ export const makeｰtag = <T extends tagｰoptions>(
           tag(defaults)`${compositeｰtag(s, ...v)}`,
         `${tagｰname}(${compositeｰtag.name})`
       );
-
-      // Old code handled only one tag:
-      //
-      // const composeｰtag = args.shift() as nativeｰtag;
-      //
-      // return rename(
-      //   (s: templateｰstrings, ...v: printable[]): string =>
-      //     tag(defaults)`${composeｰtag(s, ...v)}`,
-      //   `${tagｰname}(${composeｰtag.name})`
-      // );
     }
     // ➍ first argument is a templateｰstrings array => apply tag to template literal
     if (
@@ -403,14 +422,14 @@ export const makeｰtag = <T extends tagｰoptions>(
       return tag(defaults)(strings, ...args);
     }
 
-    // ➎ the remaining case is a call to the parametrizable version
+    // ➎ the remaining case is a call to the parametrizable version (i.e. with explicit options)
     // Note that we create a new function each time it is called with explicit parameters…
-    // When a set of options is used often, the library user should alias the tag.
+    // When a set of options is used often, it's best to alias the tag called with this set.
     return makeｰtag<tagｰoptions>(
       rename(() => tag(args[0]), tagｰname),
       {} // no defaults for this new tag
     );
-  }
+  };
   return rename(stag as tag<T>, tagｰname);
 };
 
@@ -459,7 +478,7 @@ const minｰindentation = (
 ): number => {
   return (
     (
-      trimｰtrailingｰspace(options) // ignore blank lines when trailing space must be trimmed
+      trimｰendｰspace(options) // ignore blank lines when trailing space must be trimmed
         ? lines.filter((line) => line.trim() !== "")
         : lines
     )
@@ -512,55 +531,156 @@ export const defaultｰidentityｰoptions: identityｰoptions = {
   ...defaultｰtagｰoptions,
   indentｰvalues:
     true /** replace by false, if you want `identity` to ignore indentation */,
-};
+}; /* do not declare `as const` so that users can modify it */
+
+/** @todo modify identity to handle default tag-options */
+// lineｰjoiner: " " /** replace by ``""`` to remove all space between lines */,
+// foldｰblankｰlines: true /** replace by `false` to preserve blank lines */,
+// trimｰendｰspace:
+//   true /** replace by `false` to preserve trailing space */
+
+// const textｰlines = (text: string): string[] =>
+//   text
+//     // split into lines
+//     .split("\n")
+//     // trim lines at end
+//     .map((line) => line.replace(/\s*$/, ""))
+//     // fold multiple spaces
+//     .map((line) => line.replace(/(\S)\s+/g, "$1 "))
+//     // remove double blank lines
+//     .reduce<string[]>(
+//       (
+//         textｰlines: string[],
+//         line: string,
+//         index: number,
+//         source: string[]
+//       ): string[] =>
+//         line || (index > 0 && source[index - 1]?.trim()) // useless ?. accessor, due to TS limitation
+//           ? // if the line is not blank or if it is the first one after a blank one, we keep it
+//             textｰlines.concat(line)
+//           : // otherwise, we skip it
+//             textｰlines,
+//       []
+//     );
 
 export const identity = makeｰtag<identityｰoptions>(function identity(
   options: identityｰoptions = {}
 ): nativeｰtag {
   return function (strings: templateｰstrings, ...values: printable[]): string {
-    if (strings.length > values.length) values.push(""); // make sure |strings| === |values|
     if (!options.indentｰvalues)
-      return strings.reduce<string>(
-        (text, string, index) => `${text}${string}${values[index]}`,
-        ""
+      return values.reduce<string>(
+        (text, value, index) => `${text}${value}${strings[index + 1]}`,
+        strings[0] as string
       );
     // we want to indent values in line with associated strings
-    else
-      return (
-        // normalize strings by splitting them into lines (when hitting a \n character),
-        // each associated with a value (we insert empty string values when we hit a \n)
-        normalizeｰstringsｰandｰvalues(strings, values)
-          // then split each string representation of values into individual value lines
-          .map<[string, string[]]>(([string, value]) => [
-            string as string,
-            value?.toString()?.split("\n") ?? [""],
-          ])
-          // then add indentation of initial string to each subsequent value line
-          .map<[string, string]>(([string, valueｰlines]) => {
-            // compute indentation of first line
-            const n = string.search(/\S|$/);
-            const indentation = " ".repeat(n);
-            return [
-              string,
-              [
-                // do not touch first value line
-                valueｰlines[0],
-                // add indentation to subsequent value lines
-                ...valueｰlines
-                  .slice(1)
-                  .map<string>((line) => indentation + line),
-              ].join("\n"),
-            ];
-          })
-          // then zip strings and values together to produce final text
-          .reduce<string>(
-            (text, [string, value]) => `${text}${string}${value}`,
-            ""
-          )
-      );
+    if (strings.length > values.length) values.push(""); // make sure |strings| === |values|
+    return (
+      // normalize strings by splitting them into lines (when hitting a \n character),
+      // each associated with a value (we insert empty string values when we hit a \n)
+      normalizeｰstringsｰandｰvalues(strings, values)
+        // then split each string representation of values into individual value lines
+        .map<[string, string[]]>(([string, value]) => [
+          string as string,
+          value?.toString()?.split("\n") ?? [""],
+        ])
+        // then add indentation of initial string to each subsequent value line
+        .map<[string, string]>(([string, valueｰlines]) => {
+          // compute indentation of first line
+          const n = string.search(/\S|$/);
+          const indentation = " ".repeat(n);
+          return [
+            string,
+            [
+              // do not touch first value line
+              valueｰlines[0],
+              // add indentation to subsequent value lines
+              ...valueｰlines.slice(1).map<string>((line) => indentation + line),
+            ].join("\n"),
+          ];
+        })
+        // then zip strings and values together to produce final text
+        .reduce<string>(
+          (text, [string, value]) => `${text}${string}${value}`,
+          ""
+        )
+    );
   };
 },
 defaultｰidentityｰoptions);
+
+export type outdentｰoptions = identityｰoptions & {};
+export const defaultｰoutdentｰoptions: outdentｰoptions = {
+  ...defaultｰidentityｰoptions,
+};
+/**
+ * The `outdent`tag removes first level indentation.
+ * @see {@link flush} to remove all indentation.
+ */
+export const outdent: chainableｰtagｰfunction = makeｰchainable(
+  rename(function (strings: templateｰstrings, ...values: printable[]): string {
+    const lines = textｰlines(identity(strings, ...values));
+    // compute the minimum indentation across text lines
+    const indentation = minｰindentation(lines);
+    // remove that minimum indentation from all lines
+    return lines.map((line) => line.slice(indentation)).join("\n");
+  }, "outdent")
+);
+
+type serializeｰoptions = identityｰoptions & {
+  readonly indentation?: number | string;
+  readonly filter?: (number | string)[] | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly replacer?: (key: string, value: any) => any; // see JSON.stringify until we document it here
+};
+
+export const defaultｰserializeｰoptions: serializeｰoptions = {
+  ...defaultｰidentityｰoptions,
+  indentation: 2,
+};
+
+export const serialize = makeｰtag<serializeｰoptions>(function serialize({
+  indentｰvalues,
+  indentation,
+  replacer,
+  filter,
+}: serializeｰoptions = {}): nativeｰtag {
+  let filterｰreplacer: typeof replacer;
+  if (filter && replacer) {
+    filter = filter.map((v) => v.toString());
+    filterｰreplacer = (key, value) =>
+      (filter as string[]).indexOf(key) >= 0 ? value : replacer?.(key, value);
+  } else filterｰreplacer = replacer;
+  return function (strings: templateｰstrings, ...values: printable[]): string {
+    return identity({ indentｰvalues })(
+      strings,
+      ...values.map((v) =>
+        // Would love to do this, but overloading cannot:
+        // JSON.stringify(v, replacer ?? filter, indentation)
+        filterｰreplacer
+          ? JSON.stringify(v, filterｰreplacer, indentation)
+          : JSON.stringify(v, filter, indentation)
+      )
+    );
+  };
+},
+defaultｰserializeｰoptions);
+
+/**
+ * When creating a {@linkcode numberingｰcounter}, we pass it severall options, cf. detailed properties.
+ */
+export type numberingｰoptions = tagｰoptions & {
+  /** where to start numbering from, default is 1 */
+  numberｰfrom?: number;
+  prefix?: string;
+  suffix?: string;
+  prefixｰzero?: string;
+  suffixｰzero?: string;
+  padｰwidth?: number;
+  padｰwith?: string | number;
+  padｰzeroｰwith?: string | number;
+  numberingｰscheme?: keyof typeof numberingｰschemes;
+  signｰall?: boolean;
+};
 
 // Legacy code ////////////////////////////////////////////////////////
 // Common code across tag functions; some of this is generic though.       //
@@ -570,44 +690,6 @@ export interface callableｰtagｰfunction extends nativeｰtag {
   (stringｰliteralｰorｰexpression: string): any;
   callable: boolean;
 }
-
-type serializeｰoptions = tagｰoptions & {
-  readonly indentation?: number | string;
-  readonly filter?: (number | string)[] | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly replacer?: (key: string, value: any) => any;
-};
-
-export const serialize = makeｰtag<serializeｰoptions>(
-  function serialize({
-    indentation,
-    replacer,
-    filter,
-  }: serializeｰoptions = {}): nativeｰtag {
-    let filterｰreplacer: typeof replacer;
-    if (filter && replacer) {
-      filter = filter.map((v) => v.toString());
-      filterｰreplacer = (key, value) =>
-        (filter as string[]).indexOf(key) >= 0 ? value : replacer?.(key, value);
-    } else filterｰreplacer = replacer;
-    return function (
-      strings: templateｰstrings,
-      ...values: printable[]
-    ): string {
-      return identity(
-        strings,
-        ...values.map((v) =>
-          // Would love to do this, but overloading cannot:
-          // JSON.stringify(v, replacer ?? filter, indentation)
-          filterｰreplacer
-            ? JSON.stringify(v, filterｰreplacer, indentation)
-            : JSON.stringify(v, filter, indentation)
-        )
-      );
-    };
-  },
-  { indentation: 2 }
-);
 
 export const makeｰcallable = (tag: nativeｰtag): callableｰtagｰfunction => {
   // Record the name of the callable tag, refusing nullish names
@@ -812,23 +894,6 @@ export interface chainableｰtagｰfunction extends nativeｰtag {
 }
 
 /**
- * When creating a {@linkcode numberingｰcounter}, we pass it severall options, cf. detailed properties.
- */
-export type numberingｰoptions = tagｰoptions & {
-  /** where to start numbering from, default is 1 */
-  numberｰfrom?: number;
-  prefix?: string;
-  suffix?: string;
-  prefixｰzero?: string;
-  suffixｰzero?: string;
-  padｰwidth?: number;
-  padｰwith?: string | number;
-  padｰzeroｰwith?: string | number;
-  numberingｰscheme?: keyof typeof numberingｰschemes;
-  signｰall?: boolean;
-};
-
-/**
  * Turn a `(string, ...value) => string` tag function into a function that can accept a
  * chainable tag function in lieu of its string parameter and return a chainable tag function.
  * Furthermore, this makes the tag function callable on regular strings.
@@ -855,7 +920,7 @@ export type numberingｰoptions = tagｰoptions & {
  * @param tag - the tag function to be made chainable and callable on strings
  * @returns a chainable and string callable tag function
  */
-const makeｰchainable = (tag: nativeｰtag): chainableｰtagｰfunction => {
+function makeｰchainable(tag: nativeｰtag): chainableｰtagｰfunction {
   // Record the name of the chainable tag, refusing nullish names
   const tagｰname = tag.name || "anoymousｰtag";
   // The return function has 3 overload signatures:
@@ -884,7 +949,7 @@ const makeｰchainable = (tag: nativeｰtag): chainableｰtagｰfunction => {
   }
   rename(chainable, tagｰname);
   return chainable;
-};
+}
 
 /**
  * The `raw` tag is identical to [`String.raw`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw).
@@ -950,20 +1015,6 @@ export const flush: chainableｰtagｰfunction = makeｰchainable(
       .map((line) => line.trim())
       .join("\n");
   }, "flush")
-);
-
-/**
- * The `outdent`tag removes first level indentation.
- * @see {@link flush} to remove all indentation.
- */
-export const outdent: chainableｰtagｰfunction = makeｰchainable(
-  rename(function (strings: templateｰstrings, ...values: printable[]): string {
-    const lines = textｰlines(identity(strings, ...values));
-    // compute the minimum indentation across text lines
-    const indentation = minｰindentation(lines);
-    // remove that minimum indentation from all lines
-    return lines.map((line) => line.slice(indentation)).join("\n");
-  }, "outdent")
 );
 
 /**
@@ -1422,17 +1473,23 @@ export const maxｰpaddingｰwidth = (
 ): number => {
   const sign = from < 0 || signed ? 1 : 0;
   const max = Math.max(Math.abs(from), Math.abs(length));
-  const base: any = (
-    {
-      alpha: Math.log(26),
-      digit: Math.log(10),
-      roman: [1, 2, 3, 8, 18, 28, 38, 88, 188, 288, 388, 888, 1888, 2888, 3888],
-    } as Record<string, any>
-  )[(scheme ?? "digit").toLocaleLowerCase()];
+  const base: number | number[] =
+    (
+      {
+        alpha: Math.log(26),
+        digit: Math.log(10),
+        roman: [
+          1, 2, 3, 8, 18, 28, 38, 88, 188, 288, 388, 888, 1888, 2888, 3888,
+        ],
+      } as Record<string, number | number[]>
+    )[(scheme ?? "digit").toLocaleLowerCase()] ?? Math.log(10);
   if (typeof base === "number") return sign + Math.ceil(Math.log(max) / base);
   return sign + (base as number[]).findIndex((element) => element > max);
 };
 
+/**
+ * @todo break the numbering logic from the formatting logic, plus move all numbering into its own module
+ */
 export class numberingｰcounter {
   public value: number;
   private readonly stringｰpadding: boolean;

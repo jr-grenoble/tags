@@ -110,7 +110,7 @@ function call syntax.
 
 **Returns:** [*chainableｰtagｰfunction*](chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:798](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L798)
+Defined in: [Dev/projects/tags/libs/tags.ts:880](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L880)
 
 ▸ **chainableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -124,9 +124,9 @@ Defined in: [Dev/projects/tags/libs/tags.ts:798](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:806](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L806)
+Defined in: [Dev/projects/tags/libs/tags.ts:888](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L888)
 
-▸ **chainableｰtagｰfunction**(`strings`: [*templateｰstrings*](template_strings.md), ...`values`: [*printable*](printable.md)[]): *any*
+▸ **chainableｰtagｰfunction**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
 The `templateｰstrings` array has 1 more element then the `values` rest array. E.g. in the following
 call:
@@ -161,12 +161,11 @@ for more information.
 
 | Name | Type |
 | :------ | :------ |
-| `strings` | [*templateｰstrings*](template_strings.md) |
-| `...values` | [*printable*](printable.md)[] |
+| `...args` | [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs) |
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:113](https://github.com/jr-grenoble/tags/blob/525f4c3/libs/tags.ts#L113)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
 
 ## Table of contents
 

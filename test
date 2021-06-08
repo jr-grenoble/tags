@@ -1,0 +1,26 @@
+class Ю extends Function {
+    #name: string;
+    #call(...args) {
+        console.log(this.#name, args);
+    }
+    constructo(name: string) {
+        super();
+        this.#name = name;
+        return new Proxy (
+            this,
+            {
+                apply: (target, _, args) => target.call(...args)
+            }
+        );
+    }
+    get tag() {
+        return new Ю ( `${ this.#name }->tag` );
+    }
+}
+
+const ю = new Ю ( 'ю' );
+
+const test1 = ю`template ${1}`;
+const test2 = ю(2)`template ${2}`;
+const test3 = ю.tag`template ${3}`;
+const test4 = ю.tag(4)`template ${4}`;
