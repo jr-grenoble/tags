@@ -26,7 +26,7 @@
 
 **Returns:** [*parametrizableｰtagｰfunction*](parametrizable_tag_function.md)<parameterｰtype\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:716](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L716)
+Defined in: [Dev/projects/tags/libs/tags.ts:716](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L716)
 
 ▸ **parametrizableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *any*
 
@@ -38,7 +38,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:716](https://github.com/jr-grenoble/
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:689](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L689)
+Defined in: [Dev/projects/tags/libs/tags.ts:689](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L689)
 
 ▸ **parametrizableｰtagｰfunction**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
@@ -79,7 +79,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L125)
 
 ## Table of contents
 
@@ -109,7 +109,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/
 
 • `Optional` **actualｰparameters**: parameterｰtype
 
-Defined in: [Dev/projects/tags/libs/tags.ts:720](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L720)
+Defined in: [Dev/projects/tags/libs/tags.ts:720](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L720)
 
 ___
 
@@ -129,7 +129,7 @@ ___
 
 Inherited from: [callableｰtagｰfunction](callable_tag_function.md).[callable](callable_tag_function.md#callable)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:691](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L691)
+Defined in: [Dev/projects/tags/libs/tags.ts:691](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L691)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 • **defaultｰparameters**: parameterｰtype
 
-Defined in: [Dev/projects/tags/libs/tags.ts:719](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L719)
+Defined in: [Dev/projects/tags/libs/tags.ts:719](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L719)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 • **parametrizable**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:718](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L718)
+Defined in: [Dev/projects/tags/libs/tags.ts:718](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L718)
 
 ___
 

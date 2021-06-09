@@ -223,19 +223,19 @@ type юｰꮊ = {
 };
 const юｰꮊ: юｰꮊ = { stack: [], literals: [], expressions: [] };
 
-interface Ю extends Function {
-  t: Ю;
-  (...args: any[]): Ю;
+interface юｰchainable extends Function {
+  t: юｰchainable;
+  (...args: any[]): юｰchainable;
 }
-class Ю extends Function {
+class юｰchainable extends Function {
   // each Ю object has a unique id
   private static uuid = 0;
-  private self: Ю;
+  private self: юｰchainable;
   private id: string;
   constructor() {
     super();
-    Ю.uuid += 1;
-    this.id = ` - ${Ю.uuid} - `;
+    юｰchainable.uuid += 1;
+    this.id = ` - ${юｰchainable.uuid} - `;
     this.self = new Proxy(this, {
       apply: (target, _ðɪs, args) => {
         console.log(`${target.id} proxy call(${args})`);
@@ -260,7 +260,7 @@ const expression = {
     return JSON.stringify(this.array);
   },
 };
-const ю = new Ю();
+const ю = new юｰchainable();
 
 const tests = [
   ю`text ${expression.next}`,
@@ -271,6 +271,7 @@ const tests = [
   ю(5).t(6)`text ${expression.next}`,
   ю.t.t`text ${expression.next}`,
   ю.t`abc`(8),
-  ю.t.t`text ${ю.t(9)`abc`}`,
+  // might work the day we have one object per ю:
+  // ю.t.t`text ${ ю.t( 9 )`abc` }`,
 ];
 void tests;

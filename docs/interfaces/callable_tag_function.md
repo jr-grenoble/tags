@@ -22,7 +22,7 @@
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:689](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L689)
+Defined in: [Dev/projects/tags/libs/tags.ts:689](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L689)
 
 ▸ **callableｰtagｰfunction**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
@@ -63,7 +63,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L125)
 
 ## Table of contents
 
@@ -100,7 +100,7 @@ ___
 
 • **callable**: *boolean*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:691](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L691)
+Defined in: [Dev/projects/tags/libs/tags.ts:691](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L691)
 
 ___
 

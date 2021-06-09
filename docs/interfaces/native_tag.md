@@ -63,7 +63,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/cb7d4c8/libs/tags.ts#L125)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L125)
 
 ## Table of contents
 
