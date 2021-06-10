@@ -223,24 +223,27 @@ type юｰꮊ = {
 };
 const юｰꮊ: юｰꮊ = { stack: [], literals: [], expressions: [] };
 
-interface юｰchainable extends Function {
-  t: юｰchainable;
-  (...args: any[]): юｰchainable;
+interface юｰtag extends Function {
+  t: юｰtag;
+  (...args: any[]): юｰtag;
 }
-class юｰchainable extends Function {
-  // each Ю object has a unique id
+class юｰtag extends Function {
+  // each Ю tag has a unique id
   private static uuid = 0;
-  private self: юｰchainable;
+  // we keep track of the proxy here
+  private self: юｰtag;
   private id: string;
   constructor() {
     super();
-    юｰchainable.uuid += 1;
-    this.id = ` - ${юｰchainable.uuid} - `;
+    юｰtag.uuid += 1;
+    this.id = `юｰtag «${юｰtag.uuid}»`;
     this.self = new Proxy(this, {
+      // use => syntax so that this is in context and can refer to self !
       apply: (target, _ðɪs, args) => {
         console.log(`${target.id} proxy call(${args})`);
         return this.self;
       },
+      // use => syntax so that this is in context and can refer to self !
       get: (target, property, _proxy) => {
         console.log(`${target.id} proxy access->${String(property)}`);
         return this.self;
@@ -249,6 +252,49 @@ class юｰchainable extends Function {
     return this.self;
   }
 }
+class юｰroot extends Function {
+  // each юｰroot has a unique id
+  private static uuid = 0;
+  private self: юｰroot;
+  public readonly id: string;
+  /**
+   *
+   * declare a stack here
+   */
+
+  constructor() {
+    super();
+    юｰroot.uuid += 1;
+    this.id = `юｰroot «${юｰroot.uuid}»`;
+    /**
+     * initialize the stack
+     */
+    this.self = new Proxy(this, {
+      // use => syntax so that this is in context and can refer to self !
+      apply: (target, _ðɪs, args) => {
+        console.log(`${target.id} proxy call(${args})`);
+        /**
+         * insert logic here to handle either an options record, or template literal args
+         * if passed template literals, it's the end of the chain, build and then return a string
+         * if passed options, store these in the stack and return self for further processing
+         */
+        return this.self;
+      },
+      // use => syntax so that this is in context and can refer to self !
+      get: (target, property, _proxy) => {
+        console.log(`${target.id} proxy access->${String(property)}`);
+        /**
+         * fetch tag (from prototype? if so, an addｰtag method on the object would help)
+         * then pass it (via new and constructor?) a copy of the options
+         */
+        return this.self;
+      },
+    });
+    return this.self;
+  }
+}
+
+void new юｰroot();
 
 const expression = {
   array: [] as number[],
@@ -260,7 +306,7 @@ const expression = {
     return JSON.stringify(this.array);
   },
 };
-const ю = new юｰchainable();
+const ю = new юｰtag();
 
 const tests = [
   ю`text ${expression.next}`,
