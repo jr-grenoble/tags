@@ -110,7 +110,7 @@ function call syntax.
 
 **Returns:** [*chainableｰtagｰfunction*](chainable_tag_function.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:880](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L880)
+Defined in: [Dev/projects/tags/libs/tags.ts:880](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L880)
 
 ▸ **chainableｰtagｰfunction**(`stringｰliteralｰorｰexpression`: *string*): *string*
 
@@ -124,7 +124,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:880](https://github.com/jr-grenoble/
 
 **Returns:** *string*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:888](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L888)
+Defined in: [Dev/projects/tags/libs/tags.ts:888](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L888)
 
 ▸ **chainableｰtagｰfunction**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
@@ -165,7 +165,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L125)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L125)
 
 ## Table of contents
 

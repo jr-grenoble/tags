@@ -117,7 +117,7 @@ then `paragraph` applies to the result of `outdent`, and finally, `numbering` ap
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:312](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L312)
+Defined in: [Dev/projects/tags/libs/tags.ts:312](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L312)
 
 ▸ **tag**(`options?`: T): [*tag*](tag.md)<T\>
 
@@ -129,7 +129,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:312](https://github.com/jr-grenoble/
 
 **Returns:** [*tag*](tag.md)<T\>
 
-Defined in: [Dev/projects/tags/libs/tags.ts:313](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L313)
+Defined in: [Dev/projects/tags/libs/tags.ts:313](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L313)
 
 ▸ **tag**(`tag`: [*nativeｰtag*](native_tag.md), ...`otherｰtags`: [*nativeｰtag*](native_tag.md)[]): [*nativeｰtag*](native_tag.md)
 
@@ -142,7 +142,7 @@ Defined in: [Dev/projects/tags/libs/tags.ts:313](https://github.com/jr-grenoble/
 
 **Returns:** [*nativeｰtag*](native_tag.md)
 
-Defined in: [Dev/projects/tags/libs/tags.ts:314](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L314)
+Defined in: [Dev/projects/tags/libs/tags.ts:314](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L314)
 
 ▸ **tag**(...`args`: [*nativeｰtagｰargs*](../modules.md#nativeｰtagｰargs)): *any*
 
@@ -183,7 +183,7 @@ for more information.
 
 **Returns:** *any*
 
-Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L125)
+Defined in: [Dev/projects/tags/libs/tags.ts:125](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L125)
 
 ## Table of contents
 

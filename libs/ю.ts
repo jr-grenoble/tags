@@ -1,55 +1,34 @@
 /**
- * @todo explain
+ * @module ю - Core ю module
+ *
+ * @author [Jean-René Bouvier](mailto:24454054+jr-grenoble@users.noreply.github.com)
+ *
+ * @copyright (c) Jean-René Bouvier, from 2021 on.
+ *
+ * @license
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but **without any warranty**; without even the implied warranty of
+ * merchantability or fitness for a particular purpose.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * The author hereby grants Facts Haven SAS and its affiliates the right to use and perform any derivative works.
+ *
  */
+
 import юｰoptions from "./юｰoptions";
-
-// basic types
-export interface printable {
-  toString(): string;
-}
-export type юｰparameters = {
-  literals: { cooked: string; raw: string }[];
-  expressions: printable[];
-};
-export type юｰtemplateｰliterals = [TemplateStringsArray, ...printable[]];
-/**
- * Test if arguments are юｰparameters
- * @param args - the arguments array to test
- * @returns whether these arguments are юｰparameters
- */
-export const юｰparametersʔ̣ = (args: any) =>
-  Array.isArray(args) &&
-  args.length === 1 &&
-  typeof args[0] === "object" &&
-  "expressions" in args[0] &&
-  "literals" in args[0] &&
-  "cooked" in args[0].literals;
-
-export const юｰtemplateｰliteralsʔ̣ = (args: any) =>
-  Array.isArray(args) &&
-  args.length > 0 &&
-  "length" in args[0] &&
-  "raw" in args[0];
-
-export const юｰtemplateｰliteralsｰtoｰparametersǃ = (args: any) =>
-  юｰtemplateｰliteralsʔ̣(args)
-    ? {
-        literals: args[0].map(
-          (s: string, i: number, ts: { raw: string[] }) => ({
-            cooked: s,
-            raw: ts.raw[i],
-          })
-        ),
-        expressions: args.slice(1),
-      }
-    : args;
-
-export const юｰparametersｰtoｰstringǃ = (юｰparameters: юｰparameters) =>
-  юｰparameters.expressions.reduce<string>(
-    (string: string, expression: printable, index: number) =>
-      `${string}${expression}${юｰparameters.literals[index + 1]!.cooked}`,
-    юｰparameters.literals[0]!.cooked as string
-  );
+import {
+  юｰparameters,
+  юｰparametersʔ̣,
+  юｰparametersｰtoｰstringǃ,
+  юｰtemplateｰliteralsｰtoｰparametersǃ,
+} from "./юｰtypes";
 
 export class юｰroot extends Function {
   // each юｰroot has a unique id

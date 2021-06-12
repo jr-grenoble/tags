@@ -1,51 +1,116 @@
 /**
- * Any object can be used as юｰoptions. Simple types cannot.
+ * @module юｰoptions - юｰoptions encapsulation
+ *
+ * @author [Jean-René Bouvier](mailto:24454054+jr-grenoble@users.noreply.github.com)
+ *
+ * @copyright (c) Jean-René Bouvier, from 2021 on.
+ *
+ * @license
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but **without any warranty**; without even the implied warranty of
+ * merchantability or fitness for a particular purpose.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * The author hereby grants Facts Haven SAS and its affiliates the right to use and perform any derivative works.
+ *
+ */
+
+/**
+ * Any object can be used to set юｰoptions, including arrays or functions.Simple types cannot.
  * However, specific tags can overload their `apply` trigger to accept simple parameters.
  * In that case, they must name these parameters and add them to their юｰoptions.
  */
-
 export interface юｰoptionsｰobject {
   [k: string]: any;
 }
-/**
- * All ю options conform to the юｰoption class
+
+// In strict mode,crash functions throw an error in case of illegal access
+const crashｰifｰunknown = (
+  юｰoptionsｰobject: юｰoptionsｰobject,
+  юｰoption: string,
+  attempt: string
+) =>
+  crashｰon(!(юｰoption in юｰoptionsｰobject), `${attempt} unknown «${юｰoption}»`);
+
+const crashｰifｰpresent = (
+  юｰoptionsｰobject: юｰoptionsｰobject,
+  юｰoption: string,
+  attempt: string
+) =>
+  crashｰon(
+    юｰoption in юｰoptionsｰobject,
+    `${attempt} already existing «${юｰoption}»`
+  );
+
+/*
+ * `crashｰon` is private to the юｰoptions module. By default it does nothing.
+ * However, the static `юｰoptions.strict` can change it so that it crashes when its condition parameter
+ * is true.
  */
-export default class юｰoptions {
-  // Default crash functions do nothing, but in strict mode they throw up an error
-  private crashｰifｰunknown = (_юｰoption: string, _attempt: string) => {};
-  private crashｰifｰpresent = (юｰoption: string, attempt: string) =>
-    this.crashｰifｰunknown(юｰoption, attempt);
+let crashｰon = (_condition: boolean, _attempt: string) => {};
+
+/**
+ * All ю options must conform to the юｰoption class
+ */
+export default class юｰoptions implements юｰoptionsｰobject {
+  /**
+   * Set or deactivate strict mode
+   * @param strictｰmode - whether to crash on accessing nonexistent options or on overwriting existing ones
+   * This is a global setting that affects all option objects. In other words, when this setting is turned on,
+   * accessors will crash in case of illegal access, even on option objects that were created before strict mode
+   * was turned on.
+   */
+  public static strict = (strictｰmode: boolean = true) => {
+    crashｰon = strictｰmode
+      ? (condition: boolean, attempt: string) => {
+          if (condition) throw Error(`attempt to ${attempt} юｰoption`);
+        }
+      : (_: boolean, __: string) => {};
+  };
 
   /**
    * Build an юｰoption object
-   * @param юｰoptions - initial options
-   * @param strict - whether to throw up when attempting to access non existent options or overwriting existing options
+   * @param юｰoptionsｰobject - initial options
+   * Note that if the юｰoptionsｰobject contains a boolean property named
+   * `strict` or `strictｰmode`, the constructor sets `strictｰmode` accordingly
+   * but then deletes that property from the set.
    */
-  constructor(private юｰoptions: юｰoptionsｰobject, strict: boolean = false) {
-    if (strict) {
-      this.crashｰifｰunknown = (юｰoption: string, attempt: string) => {
-        if (юｰoption in this.юｰoptions)
-          throw Error(`attempt to ${attempt} юｰoption`);
-      };
+  constructor(private юｰoptionsｰobject: юｰoptionsｰobject) {
+    if (typeof юｰoptionsｰobject?.strict === "boolean") {
+      юｰoptions.strict(юｰoptionsｰobject?.strict);
+      delete юｰoptionsｰobject.strict;
+    } else if (typeof юｰoptionsｰobject?.strictｰmode === "boolean") {
+      юｰoptions.strict(юｰoptionsｰobject?.strictｰmode);
+      delete юｰoptionsｰobject.strictｰmode;
     }
   }
 
   /**
-   * Copy юｰoptions properties
-   * @returns a copy of all юｰoptions
+   * Get a copy of юｰoptions properties
+   * @returns a shallow copy of all юｰoptions
+   * Beware! While modifying the returned object does not modify the юｰoptions object,
+   * modifying its object properties does affect the corresponding юｰoptions object properties.
    */
   get object() {
-    return { ...this.юｰoptions };
+    // the returned object is never null;
+    return { ...this.юｰoptionsｰobject }!;
   }
   /**
    * Set additional юｰoptions (or erase them all if null)
    * @param юｰoptions - either null (to reset юｰoptions) or additional options
    */
   set object(юｰoptions: юｰoptionsｰobject | null) {
-    if (юｰoptions === null) this.юｰoptions = {};
+    if (юｰoptions === null) this.юｰoptionsｰobject = {};
     else
       Object.entries(юｰoptions).forEach(
-        ([key, val]) => (this.юｰoptions[key] = val)
+        ([key, val]) => (this.юｰoptionsｰobject[key] = val)
       );
   }
   /**
@@ -55,8 +120,11 @@ export default class юｰoptions {
    * @throws in strict mode when attempting to access nonexistent options
    */
   get(юｰoption: string) {
-    this.crashｰifｰunknown(юｰoption, "get unknown");
-    return юｰoption in this.юｰoptions ? this.юｰoptions.юｰoption : undefined;
+    const юｰoptionsｰobject = this.юｰoptionsｰobject;
+    crashｰifｰunknown(юｰoptionsｰobject, юｰoption, "get");
+    return юｰoption in юｰoptionsｰobject
+      ? юｰoptionsｰobject[юｰoption]
+      : undefined;
   }
   /**
    * Set value of specific option
@@ -65,8 +133,9 @@ export default class юｰoptions {
    * @throws in strict mode when attempting to set nonexistent options
    */
   set(юｰoption: string, val: any) {
-    this.crashｰifｰunknown(юｰoption, "set unknown");
-    this.юｰoptions[юｰoption] = val;
+    const юｰoptionsｰobject = this.юｰoptionsｰobject;
+    crashｰifｰunknown(юｰoptionsｰobject, юｰoption, "set");
+    юｰoptionsｰobject[юｰoption] = val;
   }
   /**
    * Add a new option
@@ -75,8 +144,9 @@ export default class юｰoptions {
    * @throws on strict mode when attempting to re-create an existing option
    */
   new(юｰoption: string, val: any) {
-    this.crashｰifｰpresent(юｰoption, "create already existing");
-    this.юｰoptions[юｰoption] = val;
+    const юｰoptionsｰobject = this.юｰoptionsｰobject;
+    crashｰifｰpresent(юｰoptionsｰobject, юｰoption, "create");
+    юｰoptionsｰobject[юｰoption] = val;
   }
   /**
    * Remove (delete) an option
@@ -84,7 +154,8 @@ export default class юｰoptions {
    * @throws in strict mode when attempting to delete a nonexistent option
    */
   delete(юｰoption: string) {
-    this.crashｰifｰunknown(юｰoption, "delete unknown");
-    delete this.юｰoptions[юｰoption];
+    const юｰoptionsｰobject = this.юｰoptionsｰobject;
+    crashｰifｰunknown(юｰoptionsｰobject, юｰoption, "delete");
+    delete юｰoptionsｰobject[юｰoption];
   }
 }

@@ -248,13 +248,49 @@ apply subsequent tags both to literals and to expressions.
 We use [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) and of course [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect) to implement most tags. As the library is quite large,
 we use the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) to signal misspelling, cf. [chai's proxy](https://github.com/chaijs/chai/blob/main/lib/chai/utils/proxify.js). We [add chainable](https://github.com/chaijs/chai/blob/main/lib/chai/utils/addChainableMethod.js) tags dynamically to the ю object,
 
-## Tag class
+In case we need regular expressions, we use the [XRgExp](https://xregexp.com/) library.
+
+## Template parameters `юｰparameters`
+
+    ┌───────────────────────────────────────────────┐
+    │ |-o-parameters                                │
+    ├───────────────────────────────────────────────┤
+    │ literals : [ { cooked: string, raw: string } ]│
+    │ expressions : [ printable ]                   │
+    └───────────────────────────────────────────────┘
+
+The signature of a native tag is `(templateｰstrings, ...printable[]) => any`, where `templateｰstrings` is an array like object containing readonly cooked strings (the string literals in the initial template literal) as well as a `raw` member containing the corresponding raw strings, i.e. strings where escape characters such as newlines `\n` or unicode characters e.g. `\u00a0` have been left unprocessed.
+
+To simplify processing, the tail tag (i.e. the first one to be really applied) turns these into an `юｰparameters` object:
+`{ literals: { cooked: string, raw: string }[], expressions: printable[] }`. Tags closer to the head of the chain receive and process such parameters.
+
+## Singleton head `ю`
+
+`Ю` (in fact, lowercase `ю`) is a singleton object that prepends all chain tags. Its sole role is to react to being called or accessed. In that case, it creates a root tag object (one that will finally return something other than template parameters), and it forwards whatever triggered it to that root tag object.
+
+It is a proxy object derived from functions so that it can trap calls and gets. It also traps sets so that it can be configured with global options (passed to newly created `юｰroot` objects).
+
+## Root class `юｰroot`
+
+The `юｰroot` root class is created by the singleton head `ю` whenever it receives parameters (`apply`) or it is accessed as a chain head (`get`). The head object passe options to these root objects.
+
+These root objects are responsible for assembling template parameters into a resulting string. They also react to `apply` and `get` trigger:
+
+- when being called (`apply` trigger), they either record options and return themselves as a result or they assemble an `юｰparameters` into a resulting string;
+- when they are requested to access a property (`get` trigger), they fetch that property (mandatorily an `юｰtag`), and call it with whatever options they have accumulated. When the `юｰtag` returns, they assemble `юｰparameters` elements and return the resulting string.
+
+## Tag class `юｰtag`
 
 All elements of a tag chain (tag objects) are derived from the tag class. All these elements support chaining and direct call.
-When a tag chain `` ю(...paramsｰ0).tagｰ1(...paramsｰ1).tagｰ2.…tagｰn(...paramsｰn)`litｰ1 ${epressionｰ1} litｰ2 … litｰn ${expressionｰn} litｰend`  `` is processed, tag processing is pushed on a stack until the tag chain reaches the template literals. These are available in the form of a `[ templateｰstrings, ...printable[] ]` t-uple. The way this works is the following:
+
+When a tag chain `` ю(...paramsｰ0).tagｰ1(...paramsｰ1).tagｰ2.…tagｰn(...paramsｰn)`litｰ1 ${epressionｰ1} litｰ2 … litｰn ${expressionｰn} litｰend`  `` is processed, tag processing is pushed on the call stack until the tag chain reaches the template literals. These are available in the form of a `[ templateｰstrings, ...printable[] ]` t-uple. The way this works is the following:
 
 1. all tag _objects_ are derived from functions and thus are callable.
-
-Then, the tag object pops processing from the stack and executes it on the t-uple, modifying it at each step, until processing is exhausted. At this stage, the t-uple is assembled into a result, usually a string.
+2. when called with a template literal t-uple, they turn that into a `юｰparameters` t-uple and process it.
+3. when called with an `юｰparameters` t-uple, they perform their main function and return a modified `юｰparameters`.
+4. when called with other types of parameters, they modify their options accordingly and return themselves for chaining.
+5. when requested to access a property, they fetch that property, call it as a method by passing it all accumulated options, and when that property returns a `юｰparameters` t-uple, they process it and return it up.
 
 ## Options
+
+Options either apply globally (when set on the ю singleton) or down the chain tag, only from the point the options are set.

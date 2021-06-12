@@ -41,7 +41,7 @@ such as String.trim use these definitions.
 
 • **all**: = 3
 
-Defined in: [Dev/projects/tags/libs/tags.ts:195](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L195)
+Defined in: [Dev/projects/tags/libs/tags.ts:195](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L195)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 • **none**: = 0
 
-Defined in: [Dev/projects/tags/libs/tags.ts:192](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L192)
+Defined in: [Dev/projects/tags/libs/tags.ts:192](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L192)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 • **onlyｰexpressions**: = 2
 
-Defined in: [Dev/projects/tags/libs/tags.ts:194](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L194)
+Defined in: [Dev/projects/tags/libs/tags.ts:194](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L194)
 
 ___
 
@@ -65,4 +65,4 @@ ___
 
 • **onlyｰliterals**: = 1
 
-Defined in: [Dev/projects/tags/libs/tags.ts:193](https://github.com/jr-grenoble/tags/blob/75a1afd/libs/tags.ts#L193)
+Defined in: [Dev/projects/tags/libs/tags.ts:193](https://github.com/jr-grenoble/tags/blob/c325ede/libs/tags.ts#L193)
