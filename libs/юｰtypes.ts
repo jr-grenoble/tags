@@ -101,3 +101,6 @@ export const юｰparametersｰtoｰstringǃ = (юｰparameters: юｰparameters
       `${string}${expression}${юｰparameters.literals[index + 1]!.cooked}`,
     юｰparameters.literals[0]!.cooked as string
   );
+
+const tag = (strings, ...values) =>
+  values.reduce((s, v, i, strings) => `${s}${v}${strings[i + 1]}`, strings[0]);
